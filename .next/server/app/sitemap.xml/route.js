@@ -1,0 +1,10 @@
+const CHUNK_PUBLIC_PATH = "server/app/sitemap.xml/route.js";
+const runtime = require("../../chunks/[turbopack]_runtime.js");
+runtime.loadChunk("server/chunks/node_modules_@sanity_e4efa69d._.js");
+runtime.loadChunk("server/chunks/node_modules_next_fab6b3c7._.js");
+runtime.loadChunk("server/chunks/node_modules_rxjs_dist_cjs_7a4dd4fd._.js");
+runtime.loadChunk("server/chunks/node_modules_79f903da._.js");
+runtime.loadChunk("server/chunks/[root-of-the-server]__b944f840._.js");
+runtime.getOrInstantiateRuntimeModule("[project]/.next-internal/server/app/sitemap.xml/route/actions.js [app-rsc] (server actions loader, ecmascript)", CHUNK_PUBLIC_PATH);
+runtime.getOrInstantiateRuntimeModule("[project]/node_modules/next/dist/esm/build/templates/app-route.js { INNER_APP_ROUTE => \"[project]/app/sitemap--route-entry.js [app-rsc] (ecmascript)\" } [app-rsc] (ecmascript)", CHUNK_PUBLIC_PATH);
+module.exports = runtime.getOrInstantiateRuntimeModule("[project]/node_modules/next/dist/esm/build/templates/app-route.js { INNER_APP_ROUTE => \"[project]/app/sitemap--route-entry.js [app-rsc] (ecmascript)\" } [app-rsc] (ecmascript)", CHUNK_PUBLIC_PATH).exports;

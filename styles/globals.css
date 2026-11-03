@@ -1,0 +1,167 @@
+@import "tailwindcss";
+
+/* ── ClashGrotesk — self-hosted ─────────────────────────────── */
+@font-face {
+  font-family: 'ClashGrotesk';
+  src: url('/fonts/ClashGrotesk-Extralight.woff2') format('woff2'),
+       url('/fonts/ClashGrotesk-Extralight.woff') format('woff');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'ClashGrotesk';
+  src: url('/fonts/ClashGrotesk-Light.woff2') format('woff2'),
+       url('/fonts/ClashGrotesk-Light.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'ClashGrotesk';
+  src: url('/fonts/ClashGrotesk-Regular.woff2') format('woff2'),
+       url('/fonts/ClashGrotesk-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'ClashGrotesk';
+  src: url('/fonts/ClashGrotesk-Semibold.woff2') format('woff2'),
+       url('/fonts/ClashGrotesk-Semibold.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'ClashGrotesk';
+  src: url('/fonts/ClashGrotesk-Bold.woff2') format('woff2'),
+       url('/fonts/ClashGrotesk-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ── Design tokens (Tailwind v4 @theme) ─────────────────────── */
+@theme {
+  /* Typography */
+  --font-display: 'ClashGrotesk', 'DM Sans', system-ui, sans-serif;
+  --font-body:    'ClashGrotesk', 'DM Sans', system-ui, sans-serif;
+
+  /* Colors — light palette */
+  --color-canvas:     #FAFAF8;
+  --color-surface:    #FFFFFF;
+  --color-stone:      #F2EFE9;
+  --color-mist:       #E5E3DE;
+  --color-ink:        #0E0E0C;
+  --color-vapor:      #6B6B68;
+  --color-fog:        #A4A4A0;
+  --color-gold:       #B8965A;
+  --color-gold-deep:  #9A7A42;
+  --color-dusk:       #1C3556;
+  --color-night:      #111110;
+  --color-night-2:    #1A1A18;
+
+  /* Shadows */
+  --shadow-card:  0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.05);
+  --shadow-hover: 0 4px 16px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.06);
+  --shadow-modal: 0 16px 48px rgba(0,0,0,0.14), 0 6px 16px rgba(0,0,0,0.10);
+
+  /* Border radius */
+  --radius-sm:   4px;
+  --radius-md:   8px;
+  --radius-lg:   12px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+  --transition-slow: 300ms ease;
+
+  /* Spacing extras */
+  --spacing-section: clamp(3rem, 8vw, 6rem);
+}
+
+/* ── Base styles ────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  color-scheme: light;
+}
+
+body {
+  background-color: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Focus ring — accessible, branded */
+:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Skip link */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.skip-link:focus {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  width: auto;
+  height: auto;
+  padding: 0.5rem 1rem;
+  background: var(--color-surface);
+  color: var(--color-ink);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-modal);
+  z-index: 9999;
+  font-weight: 600;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: balance;
+  font-family: var(--font-display);
+  line-height: 1.15;
+}
+
+/* Images */
+img, video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Numeric tables */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Section spacing utility */
+.section-padding {
+  padding-block: var(--spacing-section);
+}
+
+/* Reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

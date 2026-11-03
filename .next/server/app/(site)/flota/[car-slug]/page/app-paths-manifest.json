@@ -1,0 +1,3 @@
+{
+  "/(site)/flota/[car-slug]/page": "app/(site)/flota/[car-slug]/page.js"
+}
