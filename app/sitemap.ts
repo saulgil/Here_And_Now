@@ -1,31 +1,22 @@
 import type { MetadataRoute } from 'next';
-import {
-  getAllCarSlugs,
-  getAllLocationSlugs,
-  getAllGuideSlugs,
-  getAllPickupPointSlugs,
-} from '@/lib/sanity/fetch';
+import { getAllCarSlugs } from '@/lib/data/cars';
+import { getAllLocationSlugs } from '@/lib/data/locations';
+import { getAllPickupPointSlugs } from '@/lib/data/pickup-points';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://hereandnow.es';
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [cars, locations, guides, pickupPoints] = await Promise.all([
-    getAllCarSlugs(),
-    getAllLocationSlugs(),
-    getAllGuideSlugs(),
-    getAllPickupPointSlugs(),
-  ]);
+export default function sitemap(): MetadataRoute.Sitemap {
+  const cars = getAllCarSlugs();
+  const locations = getAllLocationSlugs();
+  const pickupPoints = getAllPickupPointSlugs();
 
+  // Only routes that actually exist under app/ today. Legal/contact/guides
+  // pages are referenced by next.config.ts redirects as future destinations
+  // but have no page.tsx yet — do not list them here until they exist
+  // (see docs/development/sanity-removal-plan.md and sitemap-404 fix).
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: SITE_URL, changeFrequency: 'weekly', priority: 1.0 },
     { url: `${SITE_URL}/flota`, changeFrequency: 'weekly', priority: 0.9 },
-    { url: `${SITE_URL}/guias`, changeFrequency: 'weekly', priority: 0.7 },
-    { url: `${SITE_URL}/contacto`, changeFrequency: 'monthly', priority: 0.5 },
-    { url: `${SITE_URL}/terminos-y-condiciones`, changeFrequency: 'yearly', priority: 0.3 },
-    { url: `${SITE_URL}/politica-cancelacion`, changeFrequency: 'yearly', priority: 0.3 },
-    { url: `${SITE_URL}/privacidad`, changeFrequency: 'yearly', priority: 0.2 },
-    { url: `${SITE_URL}/aviso-legal`, changeFrequency: 'yearly', priority: 0.2 },
-    { url: `${SITE_URL}/cookies`, changeFrequency: 'yearly', priority: 0.2 },
   ];
 
   const locationRoutes: MetadataRoute.Sitemap = (locations ?? []).map((loc) => ({
@@ -46,18 +37,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.95,
   }));
 
-  const guideRoutes: MetadataRoute.Sitemap = (guides ?? []).map((guide) => ({
-    url: `${SITE_URL}/guias/${guide.slug}`,
-    lastModified: new Date(guide.updatedAt ?? guide.publishedAt),
-    changeFrequency: 'monthly',
-    priority: 0.6,
-  }));
-
   return [
     ...staticRoutes,
     ...locationRoutes,
     ...pickupPointRoutes,
     ...carRoutes,
-    ...guideRoutes,
   ];
 }

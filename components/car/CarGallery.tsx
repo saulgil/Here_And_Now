@@ -3,11 +3,10 @@
 import { useState, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
-import { urlFor } from '@/lib/sanity/image';
-import type { SanityImageWithAlt } from '@/types/sanity';
+import type { ImageWithAlt } from '@/types';
 
 interface CarGalleryProps {
-  images: SanityImageWithAlt[];
+  images: ImageWithAlt[];
   locale?: 'es' | 'en';
 }
 
@@ -26,12 +25,7 @@ export function CarGallery({ images, locale = 'es' }: CarGalleryProps) {
   const openLightbox = () => setLightboxOpen(true);
   const closeLightbox = () => setLightboxOpen(false);
 
-  const getImgSrc = (img: SanityImageWithAlt, w: number) => {
-    const source = img.asset._id
-      ? { _ref: img.asset._id, _type: 'reference' as const }
-      : img.asset.url;
-    return urlFor(source).width(w).quality(85).url();
-  };
+  const getImgSrc = (img: ImageWithAlt) => img.asset.url;
 
   if (!images.length) return null;
 
@@ -46,7 +40,7 @@ export function CarGallery({ images, locale = 'es' }: CarGalleryProps) {
           aria-label={`Ver imagen ${activeIndex + 1} de ${total} en pantalla completa`}
         >
           <Image
-            src={getImgSrc(active, 1400)}
+            src={getImgSrc(active)}
             alt={active.alt[locale] ?? active.alt.es}
             fill
             priority={activeIndex === 0}
@@ -100,7 +94,7 @@ export function CarGallery({ images, locale = 'es' }: CarGalleryProps) {
                 ].join(' ')}
               >
                 <Image
-                  src={getImgSrc(img, 200)}
+                  src={getImgSrc(img)}
                   alt={img.alt[locale] ?? img.alt.es}
                   fill
                   sizes="80px"
@@ -139,7 +133,7 @@ export function CarGallery({ images, locale = 'es' }: CarGalleryProps) {
           {/* Main lightbox image */}
           <div className="relative max-w-5xl w-full mx-4 aspect-[16/10]">
             <Image
-              src={getImgSrc(active, 1920)}
+              src={getImgSrc(active)}
               alt={active.alt[locale] ?? active.alt.es}
               fill
               sizes="100vw"

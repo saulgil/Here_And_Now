@@ -1,18 +1,25 @@
 import type { Metadata } from 'next';
-import { urlFor } from '@/lib/sanity/image';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://hereandnow.es';
 
 type LocaleString = { es: string; en?: string };
+type ImageAsset = { url: string };
+type ImageWithAlt = { asset: ImageAsset };
 type SeoFields = {
   metaTitle?: LocaleString;
   metaDescription?: LocaleString;
-  ogImage?: unknown;
+  ogImage?: ImageWithAlt;
   canonicalUrl?: string;
   noindex?: boolean;
 };
 
-/** Build Metadata for any page from Sanity seoFields */
+function resolveImageUrl(source: ImageWithAlt | ImageAsset | undefined): string | undefined {
+  if (!source) return undefined;
+  if ('asset' in source) return source.asset.url;
+  return source.url;
+}
+
+/** Build Metadata for any page from local SEO fields */
 export function buildMetadata({
   seo,
   path,
@@ -25,7 +32,7 @@ export function buildMetadata({
   path: string;
   fallbackTitle?: string;
   fallbackDescription?: string;
-  ogImageFallback?: unknown;
+  ogImageFallback?: ImageAsset;
   locale?: 'es' | 'en';
 }): Metadata {
   const title = seo?.metaTitle?.[locale] ?? seo?.metaTitle?.es ?? fallbackTitle;
@@ -33,10 +40,7 @@ export function buildMetadata({
   const canonicalUrl = seo?.canonicalUrl ?? `${SITE_URL}${path}`;
   const noindex = seo?.noindex ?? false;
 
-  const ogImageSource = seo?.ogImage ?? ogImageFallback;
-  const ogImageUrl = ogImageSource
-    ? urlFor(ogImageSource).width(1200).height(630).url()
-    : undefined;
+  const ogImageUrl = resolveImageUrl(seo?.ogImage) ?? resolveImageUrl(ogImageFallback);
 
   return {
     title,

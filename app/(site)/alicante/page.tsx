@@ -1,12 +1,9 @@
 import type { Metadata } from 'next';
 import { buildMetadata } from '@/lib/utils/metadata';
-import {
-  getAllActiveCars,
-  getLocationBySlug,
-  getFaqsByCategory,
-  getFeaturedTestimonials,
-} from '@/lib/sanity/fetch';
-import type { CarListItem, FAQ, Location, Testimonial } from '@/types/sanity';
+import { getCarsByLocation } from '@/lib/data/cars';
+import { getLocationBySlug } from '@/lib/data/locations';
+import { getFaqsByCategory } from '@/lib/data/faqs';
+import { getTestimonialsByLocation } from '@/lib/data/testimonials';
 import { SchemaOrg } from '@/components/shared/SchemaOrg';
 import {
   generateFAQSchema,
@@ -31,42 +28,6 @@ export const metadata: Metadata = buildMetadata({
   fallbackDescription:
     'Alquila un Mercedes en Alicante desde 130€/día. Oficina propia en El Campello, aeropuerto y puerto. Mercedes Clase V 8 plazas. Reserva ahora.',
 });
-
-// ── Static FAQ fallback (Alicante-specific) ────────────────────────
-const ALICANTE_FAQS: FAQ[] = [
-  {
-    _id: 'alc-faq-1',
-    question: { es: '¿Tenéis oficina física en Alicante?' },
-    answer: {
-      es: [{ _key: 'a1', _type: 'block', style: 'normal', markDefs: [], children: [{ _key: 'c1', _type: 'span', marks: [], text: 'Sí. Disponemos de oficina propia en El Campello (Alicante), en la Calle de la Figuera, 5, local 58. Es el único punto de la provincia donde puedes ver los vehículos en persona y resolver cualquier consulta de forma presencial. También ofrecemos recogida en el aeropuerto y el puerto de Alicante.' }] }],
-    },
-    category: 'alicante',
-  },
-  {
-    _id: 'alc-faq-2',
-    question: { es: '¿Podéis alquilar coches durante todo el año en Alicante?' },
-    answer: {
-      es: [{ _key: 'a2', _type: 'block', style: 'normal', markDefs: [], children: [{ _key: 'c2', _type: 'span', marks: [], text: 'Sí. A diferencia de otros destinos, el alquiler en Alicante está disponible los 12 meses del año. Nuestra oficina en El Campello opera todo el año y el aeropuerto de Alicante-Elche conecta con toda Europa durante todo el año.' }] }],
-    },
-    category: 'alicante',
-  },
-  {
-    _id: 'alc-faq-3',
-    question: { es: '¿El aeropuerto de Alicante está cerca de vuestra oficina?' },
-    answer: {
-      es: [{ _key: 'a3', _type: 'block', style: 'normal', markDefs: [], children: [{ _key: 'c3', _type: 'span', marks: [], text: 'El aeropuerto de Alicante-Elche (ALC) está a aproximadamente 25 km de nuestra oficina en El Campello. Si llegas en avión, también ofrecemos recogida directa en el aeropuerto para mayor comodidad.' }] }],
-    },
-    category: 'alicante',
-  },
-  {
-    _id: 'alc-faq-4',
-    question: { es: '¿Puedo devolver el coche en un punto diferente al de recogida?' },
-    answer: {
-      es: [{ _key: 'a4', _type: 'block', style: 'normal', markDefs: [], children: [{ _key: 'c4', _type: 'span', marks: [], text: 'Sí, es posible. Puedes recoger el coche en el aeropuerto y devolverlo en nuestra oficina de El Campello, por ejemplo, o viceversa. Consulta las condiciones al hacer la reserva ya que puede aplicar un cargo adicional.' }] }],
-    },
-    category: 'alicante',
-  },
-];
 
 const ALICANTE_PICKUP_POINTS: PickupPointCard[] = [
   {
@@ -109,20 +70,11 @@ const ALICANTE_REASONS = [
 ];
 
 // ── Page ──────────────────────────────────────────────────────────
-export default async function AlicantePage() {
-  const [cars, alicante, testimonials, sanityFaqs] = await Promise.all([
-    getAllActiveCars(),
-    getLocationBySlug('alicante'),
-    getFeaturedTestimonials(),
-    getFaqsByCategory('alicante'),
-  ]);
-
-  const alicanteCars = ((cars as CarListItem[] | null) ?? []).filter(
-    (c) => c.availableLocations?.includes('alicante'),
-  );
-  const alicanteLocation = alicante as Location | null;
-  const testimonialsData = testimonials as Testimonial[] | null;
-  const faqs = ((sanityFaqs as FAQ[] | null)?.length ? sanityFaqs as FAQ[] : ALICANTE_FAQS);
+export default function AlicantePage() {
+  const alicanteCars = getCarsByLocation('alicante');
+  const alicanteLocation = getLocationBySlug('alicante');
+  const testimonialsData = getTestimonialsByLocation('alicante');
+  const faqs = getFaqsByCategory('alicante');
 
   const priceFrom = alicanteCars.length > 0
     ? Math.min(...alicanteCars.map((c) => c.minPrice ?? 130))
@@ -193,11 +145,6 @@ export default async function AlicantePage() {
             heading="Vehículos disponibles en Alicante"
             subheading="Elige el Mercedes perfecto para explorar la Costa Blanca."
           />
-          {alicanteCars.length === 0 && (
-            <p className="text-center text-[var(--color-vapor)] py-8">
-              Configura Sanity para mostrar los vehículos disponibles en Alicante.
-            </p>
-          )}
         </div>
       </section>
 
@@ -249,11 +196,7 @@ export default async function AlicantePage() {
       </section>
 
       {/* 6 — Testimonials (Alicante filter) */}
-      <TestimonialsSection
-        testimonials={testimonialsData?.filter((t) =>
-          t.location?.slug?.current === 'alicante',
-        )}
-      />
+      <TestimonialsSection testimonials={testimonialsData} />
 
       {/* 7 — FAQ (Alicante-specific questions — different from Ibiza) */}
       <section className="section-padding" aria-labelledby="faq-alicante">

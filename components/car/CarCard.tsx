@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Users, Settings2, Fuel, Calendar, MapPin } from 'lucide-react';
-import { SanityImage } from '@/components/shared/SanityImage';
-import type { CarListItem } from '@/types/sanity';
+import { ContentImage } from '@/components/shared/ContentImage';
+import type { CarListItem } from '@/types';
 
 const FUEL_LABELS: Record<string, string> = {
   diesel: 'Diésel',
@@ -23,7 +23,7 @@ interface CarCardProps {
 // Server Component — no interactivity, just data display
 export function CarCard({ car, locale = 'es' }: CarCardProps) {
   const name = car.name[locale] ?? car.name.es;
-  const alt = car.mainImage.alt[locale] ?? car.mainImage.alt.es;
+  const alt = car.mainImage?.alt[locale] ?? car.mainImage?.alt.es ?? name;
   const href = `/flota/${car.slug.current}`;
 
   return (
@@ -33,14 +33,16 @@ export function CarCard({ car, locale = 'es' }: CarCardProps) {
       <div className="relative">
         <Link href={href} tabIndex={-1} aria-hidden="true">
           <div className="aspect-[16/10] overflow-hidden">
-            <SanityImage
-              asset={car.mainImage.asset}
-              alt={alt}
-              width={800}
-              height={500}
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-              className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500"
-            />
+            {car.mainImage && (
+              <ContentImage
+                asset={car.mainImage.asset}
+                alt={alt}
+                width={800}
+                height={500}
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500"
+              />
+            )}
           </div>
         </Link>
 

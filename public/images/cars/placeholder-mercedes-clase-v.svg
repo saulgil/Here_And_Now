@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="750" viewBox="0 0 1200 750">
+  <!-- TODO: replace with a real photo of the Mercedes Clase V Avantgard Largo.
+       This is a placeholder generated during the Sanity removal migration
+       because no real photo asset exists in this repo nor was ever
+       uploaded to Sanity. See docs/content/fleet-review.md. -->
+  <rect width="1200" height="750" fill="#1c1c1c"/>
+  <rect x="0" y="0" width="1200" height="750" fill="none" stroke="#b8965a" stroke-width="4"/>
+  <text x="600" y="355" font-family="Arial, sans-serif" font-size="34" fill="#b8965a" text-anchor="middle">
+    Mercedes Clase V 220d Avantgard LARGO
+  </text>
+  <text x="600" y="400" font-family="Arial, sans-serif" font-size="20" fill="#9a9a9a" text-anchor="middle">
+    Imagen pendiente — placeholder temporal
+  </text>
+</svg>

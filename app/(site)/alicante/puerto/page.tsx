@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { buildMetadata } from '@/lib/utils/metadata';
-import { getAllActiveCars, getPickupPointBySlug } from '@/lib/sanity/fetch';
-import type { CarListItem, FAQ, PickupPoint } from '@/types/sanity';
+import { getCarsByLocation } from '@/lib/data/cars';
+import { getPickupPointBySlug } from '@/lib/data/pickup-points';
+import type { FAQ } from '@/types';
 import { generateBreadcrumbSchema, generateLocalBusinessSchema, generateFAQSchema } from '@/lib/schema';
 import { PickupPageTemplate, type PickupPageStaticContent } from '@/components/location/PickupPageTemplate';
 
@@ -16,19 +17,19 @@ const ALICANTE_PORT_FAQS: FAQ[] = [
   {
     _id: 'alc-pt-1',
     question: { es: '¿Puedo alquilar el coche si llego en crucero a Alicante?' },
-    answer: { es: [{ _key: 'a1', _type: 'block', style: 'normal', markDefs: [], children: [{ _key: 'c1', _type: 'span', marks: [], text: 'Sí. Muchos cruceristas aprovechan las escalas en Alicante para explorar la Costa Blanca con nuestros vehículos. Comunícanos el horario de llegada del crucero y la duración de la escala para preparar la entrega.' }] }] },
+    answer: { es: ['Sí. Muchos cruceristas aprovechan las escalas en Alicante para explorar la Costa Blanca con nuestros vehículos. Comunícanos el horario de llegada del crucero y la duración de la escala para preparar la entrega.'] },
     category: 'alicante',
   },
   {
     _id: 'alc-pt-2',
     question: { es: '¿Cuánto tiempo tengo para explorar Alicante desde el puerto?' },
-    answer: { es: [{ _key: 'a2', _type: 'block', style: 'normal', markDefs: [], children: [{ _key: 'c2', _type: 'span', marks: [], text: 'El Puerto de Alicante está en el centro de la ciudad. En 30 minutos en coche puedes ver el Castillo de Santa Bárbara, las playas del Postiguet y San Juan, y el casco histórico. Para la Costa Blanca norte (Benidorm), necesitarías al menos 4 horas.' }] }] },
+    answer: { es: ['El Puerto de Alicante está en el centro de la ciudad. En 30 minutos en coche puedes ver el Castillo de Santa Bárbara, las playas del Postiguet y San Juan, y el casco histórico. Para la Costa Blanca norte (Benidorm), necesitarías al menos 4 horas.'] },
     category: 'alicante',
   },
   {
     _id: 'alc-pt-3',
     question: { es: '¿Hay ferri desde Alicante a Ibiza?' },
-    answer: { es: [{ _key: 'a3', _type: 'block', style: 'normal', markDefs: [], children: [{ _key: 'c3', _type: 'span', marks: [], text: 'Sí, Baleària opera rutas entre Alicante e Ibiza con cierta frecuencia, especialmente en temporada de verano. Si planeas viajar en ferri a Ibiza, también ofrecemos servicio de alquiler en el Puerto de Ibiza.' }] }] },
+    answer: { es: ['Sí, Baleària opera rutas entre Alicante e Ibiza con cierta frecuencia, especialmente en temporada de verano. Si planeas viajar en ferri a Ibiza, también ofrecemos servicio de alquiler en el Puerto de Ibiza.'] },
     category: 'alicante',
   },
 ];
@@ -58,15 +59,9 @@ const CONTENT: PickupPageStaticContent = {
   breadcrumbLabel: 'Puerto de Alicante',
 };
 
-export default async function AlicantePuertoPage() {
-  const [cars, point] = await Promise.all([
-    getAllActiveCars(),
-    getPickupPointBySlug('alicante', 'puerto'),
-  ]);
-
-  const alicanteCars = ((cars as CarListItem[] | null) ?? []).filter(
-    (c) => c.availableLocations?.includes('alicante'),
-  );
+export default function AlicantePuertoPage() {
+  const alicanteCars = getCarsByLocation('alicante');
+  const point = getPickupPointBySlug('alicante', 'puerto');
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://hereandnow.es';
 
@@ -86,7 +81,7 @@ export default async function AlicantePuertoPage() {
   return (
     <PickupPageTemplate
       content={CONTENT}
-      sanityPoint={point as PickupPoint | null}
+      dataPoint={point}
       cars={alicanteCars}
       schemas={schemas}
     />

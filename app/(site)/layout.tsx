@@ -1,5 +1,5 @@
-import { getSiteSettings } from '@/lib/sanity/fetch';
-import type { SiteSettings } from '@/types/sanity';
+import { getSiteSettings } from '@/lib/data/site';
+import type { SiteSettings } from '@/types';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { SchemaOrg } from '@/components/shared/SchemaOrg';

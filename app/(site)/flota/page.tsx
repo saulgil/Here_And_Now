@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import { buildMetadata } from '@/lib/utils/metadata';
-import { getAllActiveCars } from '@/lib/sanity/fetch';
-import type { CarListItem } from '@/types/sanity';
+import { getActiveCars } from '@/lib/data/cars';
 import { SchemaOrg } from '@/components/shared/SchemaOrg';
 import { generateBreadcrumbSchema } from '@/lib/schema';
 import { Breadcrumbs } from '@/components/shared/Breadcrumbs';
@@ -16,8 +15,7 @@ export const metadata: Metadata = buildMetadata({
 });
 
 export default async function FlotaPage() {
-  const cars = await getAllActiveCars();
-  const carList = (cars as CarListItem[] | null) ?? [];
+  const carList = getActiveCars();
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://hereandnow.es';
 
@@ -59,9 +57,6 @@ export default async function FlotaPage() {
           {carList.length === 0 && (
             <div className="text-center py-20">
               <p className="text-[var(--color-vapor)] mb-2">Flota disponible próximamente.</p>
-              <p className="text-sm text-[var(--color-fog)]">
-                Configura Sanity para mostrar los vehículos.
-              </p>
             </div>
           )}
         </div>

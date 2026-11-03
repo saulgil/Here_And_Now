@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 23, "column": 0}, "map": {"version":3,"sources":["turbopack:///[project]/middleware.ts"],"sourcesContent":["import { NextResponse } from 'next/server';\nimport type { NextRequest } from 'next/server';\n\nexport function middleware(request: NextRequest) {\n  const { pathname } = request.nextUrl;\n\n  // Normalize trailing slashes (except root)\n  if (pathname !== '/' && pathname.endsWith('/')) {\n    return NextResponse.redirect(\n      new URL(pathname.slice(0, -1) + request.nextUrl.search, request.url),\n      { status: 301 },\n    );\n  }\n\n  return NextResponse.next();\n}\n\nexport const config = {\n  matcher: ['/((?!_next/static|_next/image|favicon.ico|api|studio).*)'],\n};\n"],"names":[],"mappings":";;;;AAAA;AAAA;;AAGO,SAAS,WAAW,OAAoB;IAC7C,MAAM,EAAE,QAAQ,EAAE,GAAG,QAAQ,OAAO;IAEpC,2CAA2C;IAC3C,IAAI,aAAa,OAAO,SAAS,QAAQ,CAAC,MAAM;QAC9C,OAAO,6LAAA,CAAA,eAAY,CAAC,QAAQ,CAC1B,IAAI,IAAI,SAAS,KAAK,CAAC,GAAG,CAAC,KAAK,QAAQ,OAAO,CAAC,MAAM,EAAE,QAAQ,GAAG,GACnE;YAAE,QAAQ;QAAI;IAElB;IAEA,OAAO,6LAAA,CAAA,eAAY,CAAC,IAAI;AAC1B;AAEO,MAAM,SAAS;IACpB,SAAS;QAAC;KAA2D;AACvE"}}]
-}

@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { buildMetadata } from '@/lib/utils/metadata';
-import { getAllActiveCars, getPickupPointBySlug } from '@/lib/sanity/fetch';
-import type { CarListItem, FAQ, PickupPoint } from '@/types/sanity';
+import { getCarsByLocation } from '@/lib/data/cars';
+import { getPickupPointBySlug } from '@/lib/data/pickup-points';
+import type { FAQ } from '@/types';
 import { generateBreadcrumbSchema, generateLocalBusinessSchema, generateFAQSchema } from '@/lib/schema';
 import { PickupPageTemplate, type PickupPageStaticContent } from '@/components/location/PickupPageTemplate';
 
@@ -16,19 +17,19 @@ const ALICANTE_AIRPORT_FAQS: FAQ[] = [
   {
     _id: 'alc-ap-1',
     question: { es: '¿Cómo llego desde el Aeropuerto de Alicante a vuestra oficina de El Campello?' },
-    answer: { es: [{ _key: 'a1', _type: 'block', style: 'normal', markDefs: [], children: [{ _key: 'c1', _type: 'span', marks: [], text: 'Desde el aeropuerto ALC hasta nuestra oficina en El Campello son aproximadamente 25 km por la autovía AP-7. El trayecto dura unos 20-25 minutos. Si prefieres, también hacemos recogida directa en el aeropuerto.' }] }] },
+    answer: { es: ['Desde el aeropuerto ALC hasta nuestra oficina en El Campello son aproximadamente 25 km por la autovía AP-7. El trayecto dura unos 20-25 minutos. Si prefieres, también hacemos recogida directa en el aeropuerto.'] },
     category: 'alicante',
   },
   {
     _id: 'alc-ap-2',
     question: { es: '¿El Aeropuerto de Alicante-Elche opera todo el año?' },
-    answer: { es: [{ _key: 'a2', _type: 'block', style: 'normal', markDefs: [], children: [{ _key: 'c2', _type: 'span', marks: [], text: 'Sí. El Aeropuerto de Alicante-Elche (ALC) opera durante todo el año y es uno de los más transitados de España. Nuestro servicio está disponible los 12 meses, con conexiones desde toda Europa.' }] }] },
+    answer: { es: ['Sí. El Aeropuerto de Alicante-Elche (ALC) opera durante todo el año y es uno de los más transitados de España. Nuestro servicio está disponible los 12 meses, con conexiones desde toda Europa.'] },
     category: 'alicante',
   },
   {
     _id: 'alc-ap-3',
     question: { es: '¿Cuánto tiempo tarda el check-in en el aeropuerto de Alicante?' },
-    answer: { es: [{ _key: 'a3', _type: 'block', style: 'normal', markDefs: [], children: [{ _key: 'c3', _type: 'span', marks: [], text: 'El proceso suele durar entre 10 y 15 minutos. Verificamos tu documentación, gestionamos la fianza y revisamos el vehículo juntos. Recomendamos tener todos los documentos preparados para agilizarlo.' }] }] },
+    answer: { es: ['El proceso suele durar entre 10 y 15 minutos. Verificamos tu documentación, gestionamos la fianza y revisamos el vehículo juntos. Recomendamos tener todos los documentos preparados para agilizarlo.'] },
     category: 'alicante',
   },
 ];
@@ -44,7 +45,7 @@ const CONTENT: PickupPageStaticContent = {
   pointSlug: 'aeropuerto',
   pointType: 'airport',
   iataCode: 'ALC',
-  address: 'Aeropuerto de Alicante-Elche Miguel Hernández, 03195 L\'Altet',
+  address: "Aeropuerto de Alicante-Elche Miguel Hernández, 03195 L'Altet",
   mapsUrl: 'https://www.google.es/maps/place/Aeropuerto+de+Alicante-Elche/',
   openingHoursText: 'Horario según llegadas',
   steps: [
@@ -59,15 +60,9 @@ const CONTENT: PickupPageStaticContent = {
   breadcrumbLabel: 'Aeropuerto de Alicante',
 };
 
-export default async function AlicanteAeropuertoPage() {
-  const [cars, point] = await Promise.all([
-    getAllActiveCars(),
-    getPickupPointBySlug('alicante', 'aeropuerto'),
-  ]);
-
-  const alicanteCars = ((cars as CarListItem[] | null) ?? []).filter(
-    (c) => c.availableLocations?.includes('alicante'),
-  );
+export default function AlicanteAeropuertoPage() {
+  const alicanteCars = getCarsByLocation('alicante');
+  const point = getPickupPointBySlug('alicante', 'aeropuerto');
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://hereandnow.es';
 
@@ -87,7 +82,7 @@ export default async function AlicanteAeropuertoPage() {
   return (
     <PickupPageTemplate
       content={CONTENT}
-      sanityPoint={point as PickupPoint | null}
+      dataPoint={point}
       cars={alicanteCars}
       schemas={schemas}
     />

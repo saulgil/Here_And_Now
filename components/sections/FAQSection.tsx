@@ -5,9 +5,8 @@ import Link from 'next/link';
 import { Plus, Minus } from 'lucide-react';
 import { SchemaOrg } from '@/components/shared/SchemaOrg';
 import { generateFAQSchema } from '@/lib/schema';
-import { PortableText } from '@/components/shared/PortableText';
-import type { FAQ } from '@/types/sanity';
-import type { PortableTextBlock } from '@portabletext/types';
+import { RichText } from '@/components/shared/RichText';
+import type { FAQ } from '@/types';
 
 interface FAQSectionProps {
   faqs: FAQ[];
@@ -83,11 +82,7 @@ export function FAQSection({
               >
                 {isOpen && (
                   <div className="pb-4 text-[var(--color-vapor)] text-base leading-relaxed">
-                    {Array.isArray(answer) ? (
-                      <PortableText value={answer as unknown as PortableTextBlock[]} />
-                    ) : (
-                      <p>{String(answer)}</p>
-                    )}
+                    <RichText value={answer} />
                   </div>
                 )}
               </dd>

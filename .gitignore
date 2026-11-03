@@ -1,4 +1,21 @@
+# dependencies
+node_modules/
+
+# Next.js build output
+.next/
+out/
 
 # graphify-axet
 .graphify/
-node_modules
+
+# environment variables (keep env.example / env.placeholder versioned)
+.env
+.env.local
+.env.*.local
+
+# TypeScript incremental build info
+*.tsbuildinfo
+
+# OS
+.DS_Store
+.axet-code/

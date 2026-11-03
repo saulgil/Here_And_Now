@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { buildMetadata } from '@/lib/utils/metadata';
-import { getAllActiveCars, getPickupPointBySlug } from '@/lib/sanity/fetch';
-import type { CarListItem, FAQ, PickupPoint } from '@/types/sanity';
+import { getCarsByLocation } from '@/lib/data/cars';
+import { getPickupPointBySlug } from '@/lib/data/pickup-points';
+import type { FAQ } from '@/types';
 import { generateBreadcrumbSchema, generateLocalBusinessSchema, generateFAQSchema } from '@/lib/schema';
 import { PickupPageTemplate, type PickupPageStaticContent } from '@/components/location/PickupPageTemplate';
 
@@ -16,25 +17,25 @@ const OFICINA_FAQS: FAQ[] = [
   {
     _id: 'alc-of-1',
     question: { es: '¿Cuál es el horario de atención de la oficina?' },
-    answer: { es: [{ _key: 'a1', _type: 'block', style: 'normal', markDefs: [], children: [{ _key: 'c1', _type: 'span', marks: [], text: 'La oficina atiende de lunes a domingo en horario flexible, adaptado a las llegadas y salidas de los clientes. Recomendamos confirmar la hora exacta al reservar. Llámanos al 625 305 620 para cualquier consulta de horario.' }] }] },
+    answer: { es: ['La oficina atiende de lunes a domingo en horario flexible, adaptado a las llegadas y salidas de los clientes. Recomendamos confirmar la hora exacta al reservar. Llámanos al 625 305 620 para cualquier consulta de horario.'] },
     category: 'alicante',
   },
   {
     _id: 'alc-of-2',
     question: { es: '¿Puedo ver los vehículos en persona antes de reservar?' },
-    answer: { es: [{ _key: 'a2', _type: 'block', style: 'normal', markDefs: [], children: [{ _key: 'c2', _type: 'span', marks: [], text: 'Sí, es una de las ventajas de nuestra oficina propia. Puedes venir a ver los vehículos, resolver dudas en persona con nuestro equipo y después decidir. Somos la única empresa de alquiler de Mercedes con oficina propia en la provincia.' }] }] },
+    answer: { es: ['Sí, es una de las ventajas de nuestra oficina propia. Puedes venir a ver los vehículos, resolver dudas en persona con nuestro equipo y después decidir. Somos la única empresa de alquiler de Mercedes con oficina propia en la provincia.'] },
     category: 'alicante',
   },
   {
     _id: 'alc-of-3',
     question: { es: '¿Cómo llego a El Campello desde Alicante capital?' },
-    answer: { es: [{ _key: 'a3', _type: 'block', style: 'normal', markDefs: [], children: [{ _key: 'c3', _type: 'span', marks: [], text: 'El Campello está a solo 14 km al norte de Alicante capital, aproximadamente 15 minutos por la N-332. También puedes llegar en el TRAM (tranvía) desde Alicante, línea 3, hasta la parada El Campello.' }] }] },
+    answer: { es: ['El Campello está a solo 14 km al norte de Alicante capital, aproximadamente 15 minutos por la N-332. También puedes llegar en el TRAM (tranvía) desde Alicante, línea 3, hasta la parada El Campello.'] },
     category: 'alicante',
   },
   {
     _id: 'alc-of-4',
     question: { es: '¿Hay aparcamiento cerca de la oficina?' },
-    answer: { es: [{ _key: 'a4', _type: 'block', style: 'normal', markDefs: [], children: [{ _key: 'c4', _type: 'span', marks: [], text: 'Sí. El Campello dispone de varias zonas de aparcamiento público cerca de la oficina. En el centro del pueblo el aparcamiento suele estar disponible y es de pago por horas.' }] }] },
+    answer: { es: ['Sí. El Campello dispone de varias zonas de aparcamiento público cerca de la oficina. En el centro del pueblo el aparcamiento suele estar disponible y es de pago por horas.'] },
     category: 'alicante',
   },
 ];
@@ -64,15 +65,9 @@ const CONTENT: PickupPageStaticContent = {
   breadcrumbLabel: 'Oficina El Campello',
 };
 
-export default async function AlicanteOficinaPage() {
-  const [cars, point] = await Promise.all([
-    getAllActiveCars(),
-    getPickupPointBySlug('alicante', 'oficina'),
-  ]);
-
-  const alicanteCars = ((cars as CarListItem[] | null) ?? []).filter(
-    (c) => c.availableLocations?.includes('alicante'),
-  );
+export default function AlicanteOficinaPage() {
+  const alicanteCars = getCarsByLocation('alicante');
+  const point = getPickupPointBySlug('alicante', 'oficina');
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://hereandnow.es';
 
@@ -101,7 +96,7 @@ export default async function AlicanteOficinaPage() {
   return (
     <PickupPageTemplate
       content={CONTENT}
-      sanityPoint={point as PickupPoint | null}
+      dataPoint={point}
       cars={alicanteCars}
       schemas={schemas}
     />

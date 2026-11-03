@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { buildMetadata } from '@/lib/utils/metadata';
-import { getAllActiveCars, getPickupPointBySlug } from '@/lib/sanity/fetch';
-import type { CarListItem, FAQ, PickupPoint } from '@/types/sanity';
+import { getCarsByLocation } from '@/lib/data/cars';
+import { getPickupPointBySlug } from '@/lib/data/pickup-points';
+import type { FAQ } from '@/types';
 import { generateBreadcrumbSchema, generateLocalBusinessSchema, generateFAQSchema } from '@/lib/schema';
 import { PickupPageTemplate, type PickupPageStaticContent } from '@/components/location/PickupPageTemplate';
 
@@ -16,25 +17,25 @@ const IBIZA_AIRPORT_FAQS: FAQ[] = [
   {
     _id: 'ibz-ap-1',
     question: { es: '¿Dónde exactamente está el punto de recogida en el aeropuerto?' },
-    answer: { es: [{ _key: 'a1', _type: 'block', style: 'normal', markDefs: [], children: [{ _key: 'c1', _type: 'span', marks: [], text: 'Nuestro equipo te espera en la zona de llegadas de la Terminal del Aeropuerto de Ibiza. Te identificaremos con un cartel con tu nombre. Si tienes alguna duda, llámanos al 625 305 620.' }] }] },
+    answer: { es: ['Nuestro equipo te espera en la zona de llegadas de la Terminal del Aeropuerto de Ibiza. Te identificaremos con un cartel con tu nombre. Si tienes alguna duda, llámanos al 625 305 620.'] },
     category: 'ibiza',
   },
   {
     _id: 'ibz-ap-2',
     question: { es: '¿Qué pasa si mi vuelo llega tarde?' },
-    answer: { es: [{ _key: 'a2', _type: 'block', style: 'normal', markDefs: [], children: [{ _key: 'c2', _type: 'span', marks: [], text: 'No te preocupes. Monitorizamos los vuelos en tiempo real. Si hay retrasos, nuestro equipo esperará. Si el retraso es significativo, te pedimos que nos avises al teléfono de contacto para coordinarnos.' }] }] },
+    answer: { es: ['No te preocupes. Monitorizamos los vuelos en tiempo real. Si hay retrasos, nuestro equipo esperará. Si el retraso es significativo, te pedimos que nos avises al teléfono de contacto para coordinarnos.'] },
     category: 'ibiza',
   },
   {
     _id: 'ibz-ap-3',
     question: { es: '¿Cuánto tiempo tarda el proceso de check-in al recoger el coche?' },
-    answer: { es: [{ _key: 'a3', _type: 'block', style: 'normal', markDefs: [], children: [{ _key: 'c3', _type: 'span', marks: [], text: 'El check-in suele durar entre 10 y 15 minutos. Necesitamos verificar tu documentación (DNI/pasaporte + carnet de conducir) y gestionar la fianza. Tener los documentos preparados agiliza el proceso.' }] }] },
+    answer: { es: ['El check-in suele durar entre 10 y 15 minutos. Necesitamos verificar tu documentación (DNI/pasaporte + carnet de conducir) y gestionar la fianza. Tener los documentos preparados agiliza el proceso.'] },
     category: 'ibiza',
   },
   {
     _id: 'ibz-ap-4',
     question: { es: '¿Puedo reservar el coche el mismo día que llego?' },
-    answer: { es: [{ _key: 'a4', _type: 'block', style: 'normal', markDefs: [], children: [{ _key: 'c4', _type: 'span', marks: [], text: 'Recomendamos reservar con antelación, especialmente en julio y agosto. Sin embargo, si hay disponibilidad, aceptamos reservas de último momento. Contáctanos directamente por teléfono o WhatsApp.' }] }] },
+    answer: { es: ['Recomendamos reservar con antelación, especialmente en julio y agosto. Sin embargo, si hay disponibilidad, aceptamos reservas de último momento. Contáctanos directamente por teléfono o WhatsApp.'] },
     category: 'ibiza',
   },
 ];
@@ -65,15 +66,9 @@ const CONTENT: PickupPageStaticContent = {
   breadcrumbLabel: 'Aeropuerto de Ibiza',
 };
 
-export default async function IbizaAeropuertoPage() {
-  const [cars, point] = await Promise.all([
-    getAllActiveCars(),
-    getPickupPointBySlug('ibiza', 'aeropuerto'),
-  ]);
-
-  const ibizaCars = ((cars as CarListItem[] | null) ?? []).filter(
-    (c) => c.availableLocations?.includes('ibiza'),
-  );
+export default function IbizaAeropuertoPage() {
+  const ibizaCars = getCarsByLocation('ibiza');
+  const point = getPickupPointBySlug('ibiza', 'aeropuerto');
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://hereandnow.es';
 
@@ -93,7 +88,7 @@ export default async function IbizaAeropuertoPage() {
   return (
     <PickupPageTemplate
       content={CONTENT}
-      sanityPoint={point as PickupPoint | null}
+      dataPoint={point}
       cars={ibizaCars}
       schemas={schemas}
     />

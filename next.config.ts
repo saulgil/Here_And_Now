@@ -2,13 +2,6 @@ import type { NextConfig } from 'next';
 
 const config: NextConfig = {
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'cdn.sanity.io',
-        pathname: '/images/**',
-      },
-    ],
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [390, 640, 768, 1024, 1280, 1440, 1920],
     imageSizes: [64, 128, 256, 384],
@@ -35,7 +28,7 @@ const config: NextConfig = {
       { source: '/busqueda-coches-de-alquiler', destination: '/flota', permanent: true },
       // Vehicle informative pages
       { source: '/mercedes-clase-v-220d-avantgard-largo-ibiza', destination: '/flota/mercedes-clase-v-avantgard-largo', permanent: true },
-      { source: '/mercedes-clase-v-220d-largo', destination: '/flota', permanent: true },
+      { source: '/mercedes-clase-v-220d-largo', destination: '/flota/mercedes-clase-v-largo', permanent: true },
       { source: '/mercedes-glc-220d-4matic', destination: '/flota', permanent: true },
       // WooCommerce products
       { source: '/producto/mercedes-clase-v-220d-avantgard-largo-ibiza', destination: '/flota/mercedes-clase-v-avantgard-largo', permanent: true },

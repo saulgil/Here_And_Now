@@ -84,7 +84,7 @@ export function generateCarProductSchema(
   availabilities: Array<{
     pricePerDay: number;
     currency: string;
-    location?: { name: LocaleString };
+    location?: string;
   }>,
 ) {
   return {
@@ -99,7 +99,7 @@ export function generateCarProductSchema(
       price: av.pricePerDay,
       priceCurrency: av.currency,
       availability: 'https://schema.org/InStock',
-      areaServed: av.location ? l(av.location.name) : undefined,
+      areaServed: av.location,
     })),
   };
 }
@@ -107,16 +107,10 @@ export function generateCarProductSchema(
 // ── FAQPage ─────────────────────────────────────────────────────
 export function generateFAQSchema(faqs: Array<{
   question: LocaleString;
-  answer: unknown; // Portable Text
+  answer: { es: string[]; en?: string[] };
 }>, locale: 'es' | 'en' = 'es') {
-  // Converts Portable Text to a plain string (simplified)
-  function toPlainText(blocks: unknown): string {
-    if (!Array.isArray(blocks)) return '';
-    return blocks
-      .map((block: { children?: Array<{ text?: string }> }) =>
-        block.children?.map((c) => c.text ?? '').join('') ?? '',
-      )
-      .join(' ');
+  function toPlainText(paragraphs: string[] | undefined): string {
+    return (paragraphs ?? []).join(' ');
   }
 
   return {
@@ -127,10 +121,7 @@ export function generateFAQSchema(faqs: Array<{
       name: l(faq.question, locale),
       acceptedAnswer: {
         '@type': 'Answer',
-        text: toPlainText(
-          (faq.answer as Record<'es' | 'en', unknown>)?.[locale] ??
-          (faq.answer as Record<'es' | 'en', unknown>)?.es,
-        ),
+        text: toPlainText(faq.answer?.[locale] ?? faq.answer?.es),
       },
     })),
   };

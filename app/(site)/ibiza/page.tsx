@@ -1,12 +1,9 @@
 import type { Metadata } from 'next';
 import { buildMetadata } from '@/lib/utils/metadata';
-import {
-  getAllActiveCars,
-  getLocationBySlug,
-  getFaqsByCategory,
-  getFeaturedTestimonials,
-} from '@/lib/sanity/fetch';
-import type { CarListItem, FAQ, Location, Testimonial } from '@/types/sanity';
+import { getCarsByLocation } from '@/lib/data/cars';
+import { getLocationBySlug } from '@/lib/data/locations';
+import { getFaqsByCategory } from '@/lib/data/faqs';
+import { getTestimonialsByLocation } from '@/lib/data/testimonials';
 import { SchemaOrg } from '@/components/shared/SchemaOrg';
 import {
   generateFAQSchema,
@@ -31,42 +28,6 @@ export const metadata: Metadata = buildMetadata({
   fallbackDescription:
     'Alquila un Mercedes en Ibiza desde 130€/día. Recogida en aeropuerto, puerto u otro punto. Mercedes Clase V con hasta 8 plazas. Sin sorpresas.',
 });
-
-// ── Static FAQ fallback (Ibiza-specific) ──────────────────────────
-const IBIZA_FAQS: FAQ[] = [
-  {
-    _id: 'ibz-faq-1',
-    question: { es: '¿Puedo recoger el coche directamente en el aeropuerto de Ibiza?' },
-    answer: {
-      es: [{ _key: 'a1', _type: 'block', style: 'normal', markDefs: [], children: [{ _key: 'c1', _type: 'span', marks: [], text: 'Sí. Operamos con servicio de recogida en el Aeropuerto de Ibiza (IBZ). Nuestro equipo te espera en el área de llegadas con el vehículo preparado. Solo necesitas confirmar tu hora de aterrizaje al reservar.' }] }],
-    },
-    category: 'ibiza',
-  },
-  {
-    _id: 'ibz-faq-2',
-    question: { es: '¿Es necesario reservar con antelación en temporada alta?' },
-    answer: {
-      es: [{ _key: 'a2', _type: 'block', style: 'normal', markDefs: [], children: [{ _key: 'c2', _type: 'span', marks: [], text: 'En julio y agosto la demanda es muy alta. Recomendamos reservar con al menos 2 semanas de antelación para garantizar la disponibilidad del vehículo y el punto de recogida que prefieras.' }] }],
-    },
-    category: 'ibiza',
-  },
-  {
-    _id: 'ibz-faq-3',
-    question: { es: '¿Puedo entregar el coche en el puerto si regreso en ferri?' },
-    answer: {
-      es: [{ _key: 'a3', _type: 'block', style: 'normal', markDefs: [], children: [{ _key: 'c3', _type: 'span', marks: [], text: 'Sí. Puedes entregar el vehículo en el Puerto de Ibiza si tu vuelta es en ferri. Comunícanos el punto de entrega al hacer la reserva.' }] }],
-    },
-    category: 'ibiza',
-  },
-  {
-    _id: 'ibz-faq-4',
-    question: { es: '¿Cuántos kilómetros incluye el alquiler al día?' },
-    answer: {
-      es: [{ _key: 'a4', _type: 'block', style: 'normal', markDefs: [], children: [{ _key: 'c4', _type: 'span', marks: [], text: 'Cada día de alquiler incluye 250 km. Los kilómetros adicionales se facturan a 0,50€/km. Para una semana en Ibiza, los 250 km diarios son más que suficientes para explorar toda la isla.' }] }],
-    },
-    category: 'ibiza',
-  },
-];
 
 const IBIZA_PICKUP_POINTS: PickupPointCard[] = [
   {
@@ -101,20 +62,11 @@ const IBIZA_REASONS = [
 ];
 
 // ── Page ──────────────────────────────────────────────────────────
-export default async function IbizaPage() {
-  const [cars, ibiza, testimonials, sanityFaqs] = await Promise.all([
-    getAllActiveCars(),
-    getLocationBySlug('ibiza'),
-    getFeaturedTestimonials(),
-    getFaqsByCategory('ibiza'),
-  ]);
-
-  const ibizaCars = ((cars as CarListItem[] | null) ?? []).filter(
-    (c) => c.availableLocations?.includes('ibiza'),
-  );
-  const ibizaLocation = ibiza as Location | null;
-  const testimonialsData = testimonials as Testimonial[] | null;
-  const faqs = ((sanityFaqs as FAQ[] | null)?.length ? sanityFaqs as FAQ[] : IBIZA_FAQS);
+export default function IbizaPage() {
+  const ibizaCars = getCarsByLocation('ibiza');
+  const ibizaLocation = getLocationBySlug('ibiza');
+  const testimonialsData = getTestimonialsByLocation('ibiza');
+  const faqs = getFaqsByCategory('ibiza');
 
   const priceFrom = ibizaCars.length > 0
     ? Math.min(...ibizaCars.map((c) => c.minPrice ?? 130))
@@ -176,11 +128,6 @@ export default async function IbizaPage() {
             heading="Vehículos disponibles en Ibiza"
             subheading="Elige el Mercedes perfecto para tu escapada a Ibiza."
           />
-          {ibizaCars.length === 0 && (
-            <p className="text-center text-[var(--color-vapor)] py-8">
-              Configura Sanity para mostrar los vehículos disponibles en Ibiza.
-            </p>
-          )}
         </div>
       </section>
 
@@ -217,11 +164,7 @@ export default async function IbizaPage() {
       </div>
 
       {/* 6 — Testimonials (Ibiza only) */}
-      <TestimonialsSection
-        testimonials={testimonialsData?.filter((t) =>
-          t.location?.slug?.current === 'ibiza',
-        )}
-      />
+      <TestimonialsSection testimonials={testimonialsData} />
 
       {/* 7 — FAQ (Ibiza-specific questions) */}
       <section className="section-padding" aria-labelledby="faq-ibiza">

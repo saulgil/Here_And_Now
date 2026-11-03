@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { MapPin } from 'lucide-react';
-import type { Location } from '@/types/sanity';
+import type { Location } from '@/types';
 
 interface DestinationCardsProps {
   ibiza?: Location | null;

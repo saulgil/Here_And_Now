@@ -3,7 +3,7 @@ import {
   Palette, Armchair, Circle, ShieldCheck, Thermometer,
   PlugZap, Eye, Sun,
 } from 'lucide-react';
-import type { Car } from '@/types/sanity';
+import type { Car } from '@/types';
 
 const FUEL_LABELS: Record<string, string> = {
   diesel: 'Diésel',

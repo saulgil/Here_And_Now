@@ -5,10 +5,9 @@ import { Breadcrumbs } from '@/components/shared/Breadcrumbs';
 import { CarGrid } from '@/components/car/CarGrid';
 import { CarBookingForm } from '@/components/car/CarBookingForm';
 import { FAQSection } from '@/components/sections/FAQSection';
-import { PortableText } from '@/components/shared/PortableText';
+import { RichText } from '@/components/shared/RichText';
 import { generateBreadcrumbSchema, generateLocalBusinessSchema, generateFAQSchema } from '@/lib/schema';
-import type { CarListItem, FAQ, PickupPoint } from '@/types/sanity';
-import type { PortableTextBlock } from '@portabletext/types';
+import type { CarListItem, FAQ, PickupPoint } from '@/types';
 
 export type PickupPageStaticContent = {
   // SEO
@@ -23,7 +22,7 @@ export type PickupPageStaticContent = {
   locationName: string;
   pointSlug: string;
   pointType: 'airport' | 'port' | 'office';
-  // Static operational info (shown when Sanity not configured)
+  // Static operational info (shown when no local data overrides it)
   address?: string;
   iataCode?: string;
   mapsUrl?: string;
@@ -40,7 +39,7 @@ export type PickupPageStaticContent = {
 
 interface PickupPageTemplateProps {
   content: PickupPageStaticContent;
-  sanityPoint?: PickupPoint | null;
+  dataPoint?: PickupPoint | null;
   cars: CarListItem[];
   schemas: object[];
 }
@@ -48,16 +47,14 @@ interface PickupPageTemplateProps {
 // Server Component — reused by all 5 pickup landing pages
 export function PickupPageTemplate({
   content,
-  sanityPoint,
+  dataPoint,
   cars,
   schemas,
 }: PickupPageTemplateProps) {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://hereandnow.es';
-
-  // Merge Sanity data over static fallbacks
-  const displayName = sanityPoint?.name?.es ?? content.h1;
-  const displayAddress = sanityPoint?.address ?? content.address;
-  const displayIntro = sanityPoint?.shortDescription?.es ?? content.intro;
+  // Merge local data over static fallbacks
+  const displayName = dataPoint?.name?.es ?? content.h1;
+  const displayAddress = dataPoint?.address ?? content.address;
+  const displayIntro = dataPoint?.shortDescription?.es ?? content.intro;
 
   const minPrice = cars.length > 0
     ? Math.min(...cars.map((c) => c.minPrice ?? 130))
@@ -130,12 +127,10 @@ export function PickupPageTemplate({
                 Cómo recoger tu coche
               </h2>
 
-              {/* Sanity instructions (rich text) or static steps */}
-              {sanityPoint?.instructions?.es ? (
+              {/* Local instructions (rich text) or static steps */}
+              {dataPoint?.instructions?.es ? (
                 <div className="text-[var(--color-vapor)] leading-relaxed">
-                  <PortableText
-                    value={sanityPoint.instructions.es as unknown as PortableTextBlock[]}
-                  />
+                  <RichText value={dataPoint.instructions.es} />
                 </div>
               ) : (
                 <ol className="space-y-4">

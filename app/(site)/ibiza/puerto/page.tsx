@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { buildMetadata } from '@/lib/utils/metadata';
-import { getAllActiveCars, getPickupPointBySlug } from '@/lib/sanity/fetch';
-import type { CarListItem, FAQ, PickupPoint } from '@/types/sanity';
+import { getCarsByLocation } from '@/lib/data/cars';
+import { getPickupPointBySlug } from '@/lib/data/pickup-points';
+import type { FAQ } from '@/types';
 import { generateBreadcrumbSchema, generateLocalBusinessSchema, generateFAQSchema } from '@/lib/schema';
 import { PickupPageTemplate, type PickupPageStaticContent } from '@/components/location/PickupPageTemplate';
 
@@ -16,19 +17,19 @@ const IBIZA_PORT_FAQS: FAQ[] = [
   {
     _id: 'ibz-pt-1',
     question: { es: '¿Operáis con todas las compañías de ferri que llegan a Ibiza?' },
-    answer: { es: [{ _key: 'a1', _type: 'block', style: 'normal', markDefs: [], children: [{ _key: 'c1', _type: 'span', marks: [], text: 'Sí. Atendemos llegadas de todas las compañías que operan en el Puerto de Ibiza (Baleària, Trasmediterranea, etc.). Indica la compañía y hora de llegada al reservar para que podamos coordinarnos.' }] }] },
+    answer: { es: ['Sí. Atendemos llegadas de todas las compañías que operan en el Puerto de Ibiza (Baleària, Trasmediterranea, etc.). Indica la compañía y hora de llegada al reservar para que podamos coordinarnos.'] },
     category: 'ibiza',
   },
   {
     _id: 'ibz-pt-2',
     question: { es: '¿Puedo devolver el coche en el puerto al final de mi estancia?' },
-    answer: { es: [{ _key: 'a2', _type: 'block', style: 'normal', markDefs: [], children: [{ _key: 'c2', _type: 'span', marks: [], text: 'Sí. Podemos recoger el vehículo en el puerto cuando te vayas. Coordina el punto de entrega al hacer la reserva o avísanos con antelación.' }] }] },
+    answer: { es: ['Sí. Podemos recoger el vehículo en el puerto cuando te vayas. Coordina el punto de entrega al hacer la reserva o avísanos con antelación.'] },
     category: 'ibiza',
   },
   {
     _id: 'ibz-pt-3',
     question: { es: '¿Cuánto se tarda en llegar del puerto al centro de Ibiza?' },
-    answer: { es: [{ _key: 'a3', _type: 'block', style: 'normal', markDefs: [], children: [{ _key: 'c3', _type: 'span', marks: [], text: 'El Puerto de Ibiza está en el centro mismo de la ciudad (Eivissa). Desde el muelle a Dalt Vila son apenas 5 minutos a pie. En coche llegas a las playas del sur en 15 minutos.' }] }] },
+    answer: { es: ['El Puerto de Ibiza está en el centro mismo de la ciudad (Eivissa). Desde el muelle a Dalt Vila son apenas 5 minutos a pie. En coche llegas a las playas del sur en 15 minutos.'] },
     category: 'ibiza',
   },
 ];
@@ -58,15 +59,9 @@ const CONTENT: PickupPageStaticContent = {
   breadcrumbLabel: 'Puerto de Ibiza',
 };
 
-export default async function IbizaPuertoPage() {
-  const [cars, point] = await Promise.all([
-    getAllActiveCars(),
-    getPickupPointBySlug('ibiza', 'puerto'),
-  ]);
-
-  const ibizaCars = ((cars as CarListItem[] | null) ?? []).filter(
-    (c) => c.availableLocations?.includes('ibiza'),
-  );
+export default function IbizaPuertoPage() {
+  const ibizaCars = getCarsByLocation('ibiza');
+  const point = getPickupPointBySlug('ibiza', 'puerto');
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://hereandnow.es';
 
@@ -86,7 +81,7 @@ export default async function IbizaPuertoPage() {
   return (
     <PickupPageTemplate
       content={CONTENT}
-      sanityPoint={point as PickupPoint | null}
+      dataPoint={point}
       cars={ibizaCars}
       schemas={schemas}
     />

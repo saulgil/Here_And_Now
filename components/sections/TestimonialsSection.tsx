@@ -1,5 +1,5 @@
 import { Star } from 'lucide-react';
-import type { Testimonial } from '@/types/sanity';
+import type { Testimonial } from '@/types';
 
 // Static fallback used when Sanity is not configured
 const STATIC_TESTIMONIALS: Array<Omit<Testimonial, '_id'>> = [

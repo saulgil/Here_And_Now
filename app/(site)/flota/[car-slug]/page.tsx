@@ -5,10 +5,10 @@ import {
   getAllCarSlugs,
   getCarBySlug,
   getCarAvailabilities,
-  getAllActiveCars,
-  getFaqsByCategory,
-} from '@/lib/sanity/fetch';
-import type { Car, CarListItem, CarAvailability, FAQ } from '@/types/sanity';
+  getActiveCars,
+} from '@/lib/data/cars';
+import { getFaqsByCategory } from '@/lib/data/faqs';
+import type { Car, CarListItem, CarAvailability, FAQ } from '@/types';
 import { SchemaOrg } from '@/components/shared/SchemaOrg';
 import { generateCarProductSchema, generateBreadcrumbSchema, generateFAQSchema } from '@/lib/schema';
 import { Breadcrumbs } from '@/components/shared/Breadcrumbs';
@@ -18,14 +18,13 @@ import { CarBookingForm } from '@/components/car/CarBookingForm';
 import { StickyBookingBar } from '@/components/car/StickyBookingBar';
 import { CarGrid } from '@/components/car/CarGrid';
 import { FAQSection } from '@/components/sections/FAQSection';
-import { PortableText } from '@/components/shared/PortableText';
-import type { PortableTextBlock } from '@portabletext/types';
+import { RichText } from '@/components/shared/RichText';
 import { Users, Settings2, Fuel, Calendar, MapPin, Gauge, Navigation } from 'lucide-react';
 
 // ── Static params (build-time SSG) ──────────────────────────────
 export async function generateStaticParams() {
-  const slugs = await getAllCarSlugs();
-  return (slugs ?? []).map((s) => ({ 'car-slug': s.slug }));
+  const slugs = getAllCarSlugs();
+  return slugs.map((s) => ({ 'car-slug': s.slug }));
 }
 
 // ── Metadata ──────────────────────────────────────────────────────
@@ -33,12 +32,12 @@ type Props = { params: Promise<{ 'car-slug': string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { 'car-slug': slug } = await params;
-  const car = (await getCarBySlug(slug)) as Car | null;
+  const car: Car | null = getCarBySlug(slug);
   if (!car) return {};
 
-  const availabilities = (await getCarAvailabilities(car._id)) as CarAvailability[] | null;
-  const minPrice = availabilities?.length
-    ? Math.min(...(availabilities ?? []).map((a) => a.pricePerDay))
+  const availabilities: CarAvailability[] = getCarAvailabilities(car._id);
+  const minPrice = availabilities.length
+    ? Math.min(...availabilities.map((a) => a.pricePerDay))
     : undefined;
 
   const title = [
@@ -70,34 +69,24 @@ const TRANS: Record<string, string> = {
 export default async function CarDetailPage({ params }: Props) {
   const { 'car-slug': slug } = await params;
 
-  const [car, allCars] = await Promise.all([
-    getCarBySlug(slug),
-    getAllActiveCars(),
-  ] as const);
-
-  const typedCar = car as Car | null;
+  const typedCar: Car | null = getCarBySlug(slug);
   if (!typedCar) notFound();
 
-  const [availabilities, carFaqs] = await Promise.all([
-    getCarAvailabilities(typedCar._id),
-    typedCar.faqs ? null : getFaqsByCategory('vehicle'),
-  ]);
+  const allCarsTyped: CarListItem[] = getActiveCars();
+  const typedAvailabilities: CarAvailability[] = getCarAvailabilities(typedCar._id);
+  const carFaqs: FAQ[] = typedCar.faqs?.length ? [] : getFaqsByCategory('vehicle');
 
-  const typedAvailabilities = (availabilities as CarAvailability[] | null) ?? [];
-  const allCarsTyped = (allCars as CarListItem[] | null) ?? [];
   const relatedCars = allCarsTyped
     .filter((c) => c.slug.current !== slug)
     .slice(0, 3);
 
-  const faqs: FAQ[] = typedCar.faqs?.length
-    ? typedCar.faqs as FAQ[]
-    : ((carFaqs as FAQ[] | null) ?? []);
+  const faqs: FAQ[] = typedCar.faqs?.length ? typedCar.faqs : carFaqs;
 
   const minPrice = typedAvailabilities.length
     ? Math.min(...typedAvailabilities.map((a) => a.pricePerDay))
     : undefined;
 
-  const availableLocations = typedAvailabilities.map((a) => a.location?.slug?.current ?? '');
+  const availableLocations = typedAvailabilities.map((a) => a.location);
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://hereandnow.es';
 
@@ -143,7 +132,7 @@ export default async function CarDetailPage({ params }: Props) {
           <div className="space-y-8">
 
             {/* Gallery */}
-            {typedCar.gallery?.length > 0 ? (
+            {typedCar.gallery && typedCar.gallery.length > 0 ? (
               <CarGallery images={typedCar.gallery} />
             ) : typedCar.mainImage ? (
               <div className="aspect-[16/10] rounded-[var(--radius-md)] overflow-hidden bg-[var(--color-stone)]">
@@ -173,9 +162,7 @@ export default async function CarDetailPage({ params }: Props) {
                   Descripción del vehículo
                 </h2>
                 <div className="text-[var(--color-vapor)] leading-relaxed">
-                  <PortableText
-                    value={typedCar.fullDescription.es as unknown as PortableTextBlock[]}
-                  />
+                  <RichText value={typedCar.fullDescription.es} />
                 </div>
               </div>
             )}

@@ -1,5 +1,5 @@
 import { CarCard } from './CarCard';
-import type { CarListItem } from '@/types/sanity';
+import type { CarListItem } from '@/types';
 
 interface CarGridProps {
   cars: CarListItem[];
