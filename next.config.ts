@@ -18,7 +18,6 @@ const config: NextConfig = {
       { source: '/alquiler-coches-mercedes', destination: '/', permanent: true },
       // Contact
       { source: '/contacto-alquiler-coches-alicante-ibiza', destination: '/contacto', permanent: true },
-      { source: '/contacto', destination: '/contacto', permanent: false },
       // Legal
       { source: '/politica-privacidad', destination: '/privacidad', permanent: true },
       { source: '/politica-de-cookies-ue', destination: '/cookies', permanent: true },
