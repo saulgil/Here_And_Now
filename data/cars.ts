@@ -17,11 +17,15 @@ import type { Car } from '@/types';
 //   features, fotos) NO se inventan — se dejan sin definir hasta que el
 //   negocio las confirme.
 //
-// mainImage/gallery del vehículo de Ibiza apuntan a un placeholder SVG
-// genérico (TODO: sustituir por fotos reales) — no existe ninguna foto real
-// en este repo ni se llegó a subir ninguna a Sanity (ver fleet-review.md).
-// El vehículo de Alicante no tiene ninguna imagen confirmada, ni siquiera
-// placeholder — se omite `mainImage`/`gallery` deliberadamente.
+// mainImage/gallery de ambos vehículos usan ahora las fotos reales
+// aportadas por el negocio, una carpeta exclusiva por vehículo — no se
+// comparte ninguna imagen entre los dos modelos:
+// - public/images/cars/mercedes-clase-v-250d-avantgarde-largo-4matic/ (Ibiza — car-mercedes-clase-v-avantgard-largo)
+// - public/images/cars/mercedes-clase-v-250d-avantgarde-largo/ (Alicante — car-mercedes-clase-v-largo)
+// NOTE: la carpeta de imágenes usada por cada vehículo NO coincide con el
+// nombre de carpeta igual a su propio slug — la asociación correcta
+// vehículo↔ubicación↔carpeta fue corregida tras detectarse que estaba
+// invertida. Ver GALLERY_IBIZA / GALLERY_ALICANTE más abajo.
 
 const EXTRAS_IBIZA = [
   { name: { es: 'Silleta de bebé (0>9 kg)', en: 'Baby seat (0-9 kg)' }, price: 6.9, pricingModel: 'one_time' as const, maxQuantity: 1 },
@@ -39,14 +43,34 @@ const EXTRAS_IBIZA = [
 // as inherited/pending exact confirmation in fleet-review.md.
 const EXTRAS_ALICANTE = EXTRAS_IBIZA.map((e) => ({ ...e, pricingModel: 'per_day' as const }));
 
-// TODO: replace with real photos of the vehicle (see fleet-review.md).
-const PLACEHOLDER_IMAGE = {
-  asset: { url: '/images/cars/placeholder-mercedes-clase-v.svg' },
+// Real photos for the Ibiza vehicle (car-mercedes-clase-v-avantgard-largo,
+// "Mercedes-Benz Clase V 250 d Avantgarde Largo"). The correct source
+// folder for this car's real photos is
+// public/images/cars/mercedes-clase-v-250d-avantgarde-largo-4matic/
+// (vehicle↔location↔folder association fixed — was previously swapped).
+const GALLERY_IBIZA = [
+  '01.png', '02.png', '03.png', '04.png', '05.jpg', '06.jpg', '07.jpg', '08.jpeg', '09.png',
+].map((file) => ({
+  asset: { url: `/images/cars/mercedes-clase-v-250d-avantgarde-largo-4matic/${file}` },
   alt: {
-    es: 'Imagen provisional — Mercedes Clase V 220d Avantgard Largo',
-    en: 'Placeholder image — Mercedes V Class 220D Avantgard Long',
+    es: 'Mercedes-Benz Clase V 250 d Avantgarde Largo',
+    en: 'Mercedes-Benz V-Class 250 d Avantgarde Long',
   },
-};
+}));
+
+// Real photos for the Alicante vehicle (car-mercedes-clase-v-largo,
+// "Mercedes-Benz Clase V 250 d Avantgarde Largo 4MATIC"). The correct
+// source folder for this car's real photos is
+// public/images/cars/mercedes-clase-v-250d-avantgarde-largo/
+// (vehicle↔location↔folder association fixed — was previously swapped).
+const GALLERY_ALICANTE = [
+  '01.png', '02.png', '03.jpg', '04.jpg', '05.png', '06.png', '07.png', '08.png',
+].map((file) => ({
+  asset: { url: `/images/cars/mercedes-clase-v-250d-avantgarde-largo/${file}` },
+  alt: {
+    es: 'Mercedes-Benz Clase V 250 d Avantgarde Largo 4MATIC',
+  },
+}));
 
 // Coverages for car-mercedes-clase-v-avantgard-largo (Ibiza) — verified on
 // the live site (franchise 850€/Avantgarde, deposit 1500€, full coverage
@@ -111,14 +135,14 @@ export const CARS: Car[] = [
   {
     _id: 'car-mercedes-clase-v-avantgard-largo',
     name: {
-      es: 'Mercedes Clase V 220d Avantgard LARGO',
-      en: 'Mercedes V Class 220D Avantgard Long',
+      es: 'Mercedes-Benz Clase V 250 d Avantgarde Largo',
+      en: 'Mercedes-Benz V-Class 250 d Avantgarde Long',
     },
     internalId: 'car-001',
-    slug: { current: 'mercedes-clase-v-avantgard-largo' },
+    slug: { current: 'mercedes-clase-v-250d-avantgarde-largo' },
     brand: { name: 'Mercedes-Benz' },
-    model: 'Clase V 220d',
-    variant: 'Avantgard LARGO',
+    model: 'Clase V 250 d',
+    variant: 'Avantgarde Largo',
     year: 2024,
     category: { name: { es: 'Monovolumen', en: 'Minivan' }, slug: { current: 'monovolumen' } },
 
@@ -139,8 +163,8 @@ export const CARS: Car[] = [
     kmExtraPrice: 0.5,
 
     shortDescription: {
-      es: 'Descubre Mercedes Avantgard largo monovolumen de alta gama y de gran tamaño para una experiencia de viaje inigualable con sus 8 cómodas plazas.',
-      en: 'Discover the Mercedes Avantgard Long, a premium large minivan for an unrivalled travel experience with its 8 comfortable seats.',
+      es: 'Descubre Mercedes-Benz Avantgarde largo monovolumen de alta gama y de gran tamaño para una experiencia de viaje inigualable con sus 8 cómodas plazas.',
+      en: 'Discover the Mercedes-Benz Avantgarde Long, a premium large minivan for an unrivalled travel experience with its 8 comfortable seats.',
     },
     fullDescription: {
       es: [
@@ -158,8 +182,8 @@ export const CARS: Car[] = [
       { es: 'Cristales tintados negros', en: 'Black tinted windows' },
     ],
 
-    mainImage: PLACEHOLDER_IMAGE,
-    gallery: [PLACEHOLDER_IMAGE],
+    mainImage: GALLERY_IBIZA[0],
+    gallery: GALLERY_IBIZA,
 
     active: true,
     featured: true,
@@ -180,12 +204,12 @@ export const CARS: Car[] = [
 
     seo: {
       metaTitle: {
-        es: 'Alquiler Mercedes Clase V Avantgard LARGO — 8 plazas desde 130€/día | Here & Now',
-        en: 'Mercedes V Class Avantgard Long Rental — 8 seats from €130/day | Here & Now',
+        es: 'Alquiler Mercedes-Benz Clase V 250 d Avantgarde Largo — 8 plazas desde 130€/día | Here & Now',
+        en: 'Mercedes-Benz V-Class 250 d Avantgarde Long Rental — 8 seats from €130/day | Here & Now',
       },
       metaDescription: {
-        es: 'Alquila el Mercedes Clase V Avantgard LARGO en Ibiza. 8 plazas, automático, recogida en aeropuerto o puerto. Desde 130€/día. Reserva ahora.',
-        en: 'Rent the Mercedes V Class Avantgard Long in Ibiza. 8 seats, automatic, airport or port pick-up. From €130/day. Book now.',
+        es: 'Alquila el Mercedes-Benz Clase V 250 d Avantgarde Largo en Ibiza. 8 plazas, automático, recogida en aeropuerto o puerto. Desde 130€/día. Reserva ahora.',
+        en: 'Rent the Mercedes-Benz V-Class 250 d Avantgarde Long in Ibiza. 8 seats, automatic, airport or port pick-up. From €130/day. Book now.',
       },
       noindex: false,
     },
@@ -194,14 +218,14 @@ export const CARS: Car[] = [
   {
     _id: 'car-mercedes-clase-v-largo',
     name: {
-      es: 'Mercedes Clase V 220D Largo',
+      es: 'Mercedes-Benz Clase V 250 d Avantgarde Largo 4MATIC',
       // en: PENDING — no English name was ever published for this product.
     },
     internalId: 'car-002',
-    slug: { current: 'mercedes-clase-v-largo' },
+    slug: { current: 'mercedes-clase-v-250d-avantgarde-largo-4matic' },
     brand: { name: 'Mercedes-Benz' },
-    model: 'Clase V 220D',
-    variant: 'Largo',
+    model: 'Clase V 250 d',
+    variant: 'Avantgarde Largo 4MATIC',
     // year/category: not confirmed for this specific trim — omitted rather
     // than guessed (category "Monovolumen" would be safe but is left out
     // to avoid asserting anything not explicitly confirmed for car-002).
@@ -225,13 +249,13 @@ export const CARS: Car[] = [
     kmExtraPrice: 0.5, // INHERITED / PENDING confirmation for this variant
 
     shortDescription: {
-      es: 'Mercedes Clase V 220D Largo. Ficha técnica, fotos y descripción pendientes de confirmación por parte del negocio.',
+      es: 'Mercedes-Benz Clase V 250 d Avantgarde Largo 4MATIC. Ficha técnica, fotos y descripción pendientes de confirmación por parte del negocio.',
     },
     // fullDescription: PENDING — no description was ever published for this product.
     features: [], // PENDING — no equipment/features confirmed for this product; not invented.
 
-    // mainImage/gallery: deliberately omitted — no image confirmed at all
-    // for this product (not even a generic placeholder), see fleet-review.md.
+    mainImage: GALLERY_ALICANTE[0],
+    gallery: GALLERY_ALICANTE,
 
     active: true,
     featured: false,
@@ -251,10 +275,10 @@ export const CARS: Car[] = [
 
     seo: {
       metaTitle: {
-        es: 'Alquiler Mercedes Clase V 220D Largo — Alicante desde 140€/día | Here & Now',
+        es: 'Alquiler Mercedes-Benz Clase V 250 d Avantgarde Largo 4MATIC — Alicante desde 140€/día | Here & Now',
       },
       metaDescription: {
-        es: 'Alquila el Mercedes Clase V 220D Largo en Alicante. Recogida en aeropuerto, oficina o puerto. Desde 140€/día. Reserva ahora.',
+        es: 'Alquila el Mercedes-Benz Clase V 250 d Avantgarde Largo 4MATIC en Alicante. Recogida en aeropuerto, oficina o puerto. Desde 140€/día. Reserva ahora.',
       },
       noindex: false,
     },

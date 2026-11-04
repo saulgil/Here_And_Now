@@ -88,7 +88,7 @@ export function MobileNav({ items, phone }: MobileNavProps) {
         <nav className="flex-1 overflow-y-auto px-6 py-4" aria-label="Navegación móvil">
           <ul className="space-y-1">
             {items.map((item) => (
-              <li key={item.href}>
+              <li key={`${item.href}-${item.label.es}`}>
                 <Link
                   href={item.href}
                   onClick={() => setIsOpen(false)}

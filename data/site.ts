@@ -17,9 +17,6 @@ export const SITE_SETTINGS: SiteSettings = {
     {
       label: { es: 'Nuestra flota', en: 'Our fleet' },
       href: '/flota',
-      children: [
-        { label: { es: 'Mercedes Clase V Avantgard Largo', en: 'Mercedes V Class Avantgard Long' }, href: '/flota/mercedes-clase-v-avantgard-largo' },
-      ],
     },
     {
       label: { es: 'Ibiza', en: 'Ibiza' },

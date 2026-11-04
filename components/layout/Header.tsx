@@ -48,7 +48,7 @@ export function Header({ settings }: HeaderProps) {
         {/* Desktop nav */}
         <nav className="hidden lg:flex items-center gap-8" aria-label="Navegación principal">
           {navItems.map((item) => (
-            <div key={item.href} className="relative group">
+            <div key={`${item.href}-${item.label.es}`} className="relative group">
               <Link
                 href={item.href}
                 className="text-sm font-medium text-[var(--color-ink)] hover:text-[var(--color-gold)] transition-colors py-2"
@@ -61,7 +61,7 @@ export function Header({ settings }: HeaderProps) {
 
               {/* Dropdown */}
               {item.children && item.children.length > 0 && (
-                <div className="absolute top-full left-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-180">
+                <div className="absolute top-full left-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all duration-180">
                   <ul className="bg-[var(--color-surface)] border border-[var(--color-mist)] rounded-[var(--radius-md)] shadow-[var(--shadow-modal)] py-2 min-w-[200px]">
                     {item.children.map((child) => (
                       <li key={child.href}>

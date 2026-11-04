@@ -43,7 +43,7 @@
 **Keywords explícitamente NO asignadas aquí** (por pertenecer a otras páginas):
 - `alquiler coches Ibiza` → /ibiza/
 - `alquiler coches Alicante` → /alicante/
-- `alquiler Mercedes Clase V` → /flota/mercedes-clase-v-avantgard-largo/
+- `alquiler Mercedes Clase V` → /flota/mercedes-clase-v-250d-avantgarde-largo/
 
 **H1 recomendado:**
 > Alquiler de coches Mercedes en Ibiza y Alicante

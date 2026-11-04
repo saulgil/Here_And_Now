@@ -96,7 +96,7 @@ export const FAQS: FAQ[] = [
   {
     _id: 'faq-clase-v-plazas',
     question: { es: '¿Cuántas plazas tiene el Mercedes Clase V?' },
-    answer: { es: ['El Mercedes Clase V 220d Avantgard LARGO tiene 8 plazas, repartidas en hasta tres filas de asientos. Todas las plazas cuentan con cinturones de seguridad homologados.'] },
+    answer: { es: ['El Mercedes-Benz Clase V 250 d Avantgarde Largo tiene 8 plazas, repartidas en hasta tres filas de asientos. Todas las plazas cuentan con cinturones de seguridad homologados.'] },
     category: 'vehicle',
   },
   {

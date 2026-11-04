@@ -27,12 +27,12 @@ const config: NextConfig = {
       // Search/utility
       { source: '/busqueda-coches-de-alquiler', destination: '/flota', permanent: true },
       // Vehicle informative pages
-      { source: '/mercedes-clase-v-220d-avantgard-largo-ibiza', destination: '/flota/mercedes-clase-v-avantgard-largo', permanent: true },
-      { source: '/mercedes-clase-v-220d-largo', destination: '/flota/mercedes-clase-v-largo', permanent: true },
+      { source: '/mercedes-clase-v-220d-avantgard-largo-ibiza', destination: '/flota/mercedes-clase-v-250d-avantgarde-largo', permanent: true },
+      { source: '/mercedes-clase-v-220d-largo', destination: '/flota/mercedes-clase-v-250d-avantgarde-largo-4matic', permanent: true },
       { source: '/mercedes-glc-220d-4matic', destination: '/flota', permanent: true },
       // WooCommerce products
-      { source: '/producto/mercedes-clase-v-220d-avantgard-largo-ibiza', destination: '/flota/mercedes-clase-v-avantgard-largo', permanent: true },
-      { source: '/producto/mercedes-clase-v-220d-avantgard-largo', destination: '/flota/mercedes-clase-v-avantgard-largo', permanent: true },
+      { source: '/producto/mercedes-clase-v-220d-avantgard-largo-ibiza', destination: '/flota/mercedes-clase-v-250d-avantgarde-largo', permanent: true },
+      { source: '/producto/mercedes-clase-v-220d-avantgard-largo', destination: '/flota/mercedes-clase-v-250d-avantgarde-largo', permanent: true },
       // Blog/author
       { source: '/hola-mundo', destination: '/', permanent: true },
       // WooCommerce taxonomies

@@ -216,7 +216,7 @@ const pickupPointRoutes: MetadataRoute.Sitemap = [
 | `/politica-de-cancelacion-y-devolucion` | `/politica-cancelacion` | ✅ 301 |
 | `/reembolso_devoluciones` | `/terminos-y-condiciones` | ✅ 301 |
 | `/busqueda-coches-de-alquiler` | `/flota` | ✅ 301 |
-| `/mercedes-clase-v-220d-avantgard-largo-ibiza` | `/flota/mercedes-clase-v-avantgard-largo` | ✅ 301 |
+| `/mercedes-clase-v-220d-avantgard-largo-ibiza` | `/flota/mercedes-clase-v-250d-avantgarde-largo` | ✅ 301 |
 | `/hola-mundo` | `/` | ✅ 301 |
 | `/brw_Pasajeros/:path*` | `/flota` | ✅ 301 |
 | `/brw_tipo/:path*` | `/flota` | ✅ 301 |
