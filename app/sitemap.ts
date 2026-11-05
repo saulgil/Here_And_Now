@@ -10,13 +10,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const locations = getAllLocationSlugs();
   const pickupPoints = getAllPickupPointSlugs();
 
-  // Only routes that actually exist under app/ today. Legal/contact/guides
-  // pages are referenced by next.config.ts redirects as future destinations
-  // but have no page.tsx yet — do not list them here until they exist
-  // (see docs/development/sanity-removal-plan.md and sitemap-404 fix).
+  // Only routes that actually exist under app/ today. Legal/guides pages
+  // are referenced by next.config.ts redirects as future destinations but
+  // have no page.tsx yet — do not list them here until they exist (see
+  // docs/development/sanity-removal-plan.md and sitemap-404 fix).
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: SITE_URL, changeFrequency: 'weekly', priority: 1.0 },
     { url: `${SITE_URL}/flota`, changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${SITE_URL}/contacto`, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${SITE_URL}/privacidad`, changeFrequency: 'yearly', priority: 0.3 },
   ];
 
   const locationRoutes: MetadataRoute.Sitemap = (locations ?? []).map((loc) => ({

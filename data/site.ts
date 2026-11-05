@@ -11,6 +11,8 @@ export const SITE_SETTINGS: SiteSettings = {
     en: 'Mercedes Car Rental in Ibiza and Alicante',
   },
   phone: '+34625305620',
+  email: 'info@hereandnowibiza.com',
+  whatsappUrl: 'https://wa.me/34625305620',
   instagramUrl: 'https://www.instagram.com/hereandnowibiza/',
   threadsUrl: 'https://www.threads.net/@hereandnowibiza',
   mainNav: [

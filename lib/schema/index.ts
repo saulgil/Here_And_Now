@@ -141,6 +141,44 @@ export function generateBreadcrumbSchema(items: Array<{ name: string; url: strin
   };
 }
 
+// ── ContactPage ───────────────────────────────────────────────
+export function generateContactPageSchema(settings: {
+  siteName?: string;
+  path: string;
+  phone?: string;
+  email?: string;
+}) {
+  const siteName = settings.siteName ?? 'Here & Now';
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ContactPage',
+    name: `Contacto — ${siteName}`,
+    url: `${SITE_URL}${settings.path}`,
+    mainEntity: {
+      '@type': 'Organization',
+      name: siteName,
+      telephone: settings.phone,
+      email: settings.email,
+    },
+  };
+}
+
+// ── WebPage (legal pages: privacidad, términos, aviso legal...) ─
+export function generateLegalPageSchema(settings: {
+  name: string;
+  path: string;
+  description?: string;
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: settings.name,
+    url: `${SITE_URL}${settings.path}`,
+    description: settings.description,
+    isPartOf: { '@id': `${SITE_URL}/#website` },
+  };
+}
+
 // ── WebSite (homepage only) ─────────────────────────────────────
 export function generateWebSiteSchema(siteName: string) {
   return {
