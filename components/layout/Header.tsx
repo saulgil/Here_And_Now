@@ -30,15 +30,16 @@ export function Header({ settings }: HeaderProps) {
       <div className="w-full max-w-[1280px] mx-auto flex items-center justify-between px-6 lg:px-12">
 
         {/* Logo */}
-        <Link href="/" aria-label={`${siteName} — página de inicio`} className="flex-shrink-0">
+        <Link href="/" aria-label={`${siteName} — página de inicio`} className="flex-shrink-0 rounded-sm focus:outline-none focus-visible:outline-none">
           {logoUrl ? (
             <Image
               src={logoUrl}
               alt={siteName}
-              width={140}
-              height={27}
+              width={180}
+              height={34}
               priority
-              className="h-7 w-auto"
+              unoptimized
+              style={{ height: '32px', width: 'auto' }}
             />
           ) : (
             <span className="font-bold text-lg tracking-tight">{siteName}</span>

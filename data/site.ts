@@ -2,10 +2,10 @@ import type { SiteSettings } from '@/types';
 
 // Migrated from scripts/seed-sanity.ts (siteSettings singleton) and the
 // hardcoded defaults already used by components/layout/Header.tsx and
-// components/layout/Footer.tsx. No logo image exists yet (see
-// docs/content/fleet-review.md).
+// components/layout/Footer.tsx.
 export const SITE_SETTINGS: SiteSettings = {
   siteName: 'Here & Now',
+  logo: { asset: { url: '/images/logo-here-and-now.svg' } },
   tagline: {
     es: 'Alquiler de coches Mercedes en Ibiza y Alicante',
     en: 'Mercedes Car Rental in Ibiza and Alicante',
