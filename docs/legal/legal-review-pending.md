@@ -75,3 +75,12 @@ Fuente completa de la comparación: `docs/legal/privacy-original.md` y
 - **Jurisdicción / territorio**: se menciona la prohibición de cruzar a Formentera y la necesidad de autorización para cruzar entre islas. La cláusula de "solo en Alicante" para devolución fuera de horario (apartado 1.3) implica que en Ibiza no aplica ese procedimiento. **Confirmar que ambas condiciones siguen vigentes con la operativa actual.**
 - **Referencias legales (Código Penal)**: se citan los artículos 237 y 244 del Código Penal para la definición de robo. Estos artículos deben revisarse por si su numeración ha cambiado tras reformas del Código Penal posteriores a 2024.
 - **Intermediarios / agencias (OTAs)**: los apartados 7.1.1 y 7.2 mencionan reservas realizadas "a través de un intermediario". Confirmar si Here and Now distribuye actualmente a través de OTAs y si las condiciones de modificación/cancelación aplicables a esos canales siguen siendo las descritas.
+
+---
+
+## Política de Cookies (`/cookies`)
+
+- **Contenido original no disponible**: la página original de WordPress solo contenía el shortcode `[cmplz-document type="cookie-statement" region="eu"]` del plugin Complianz. El texto real era generado dinámicamente por el plugin y no consta en el export de WordPress. No se ha podido migrar contenido real; la página publicada contiene únicamente información verificable y genérica.
+- **Cookies activas actuales**: la auditoría del código del nuevo sitio (Next.js) confirma que **no hay tracking activo** implementado en ningún componente. No existe código de Google Analytics, Meta Pixel, Hotjar ni ningún otro servicio de terceros que instale cookies. El único indicio es `NEXT_PUBLIC_GA_ID=G-...` en `env.example`, marcado como opcional y sin implementar.
+- **Acción requerida antes de publicar**: la `/cookies` actual describe el estado mínimo real (solo cookies técnicas necesarias). En cuanto se decida e implemente cualquier herramienta de analítica, marketing o de consentimiento, **esta página debe actualizarse con el catálogo real de cookies** (nombre, proveedor, finalidad, duración, categoría) y, si procede, añadir un banner/sistema de consentimiento previo al uso de cookies no esenciales (RGPD/LSSI).
+- **Escaneo pendiente**: el escaneo de cookies de Complianz estaba vinculado al dominio antiguo `hereandnowibiza.com` con tecnología WordPress/WooCommerce/Elementor. Deberá realizarse un nuevo escaneo para `hereandnow.es` (Next.js) una vez el sitio esté en producción.
