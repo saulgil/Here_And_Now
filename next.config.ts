@@ -6,6 +6,7 @@ const config: NextConfig = {
     deviceSizes: [390, 640, 768, 1024, 1280, 1440, 1920],
     imageSizes: [64, 128, 256, 384],
     minimumCacheTTL: 2592000,
+    qualities: [85],
   },
 
   async redirects() {
