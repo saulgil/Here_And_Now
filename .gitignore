@@ -19,3 +19,5 @@ out/
 # OS
 .DS_Store
 .axet-code/
+# Playwright CLI output (may contain credentials)
+.playwright-cli/
