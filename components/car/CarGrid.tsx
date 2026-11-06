@@ -40,9 +40,9 @@ export function CarGrid({ cars, heading, subheading, locale = 'es', className }:
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
         role="list"
       >
-        {cars.map((car) => (
+        {cars.map((car, index) => (
           <li key={car._id}>
-            <CarCard car={car} locale={locale} />
+            <CarCard car={car} locale={locale} priority={index === 0} />
           </li>
         ))}
       </ul>

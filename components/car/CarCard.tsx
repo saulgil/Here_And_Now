@@ -18,10 +18,11 @@ const TRANSMISSION_LABELS: Record<string, string> = {
 interface CarCardProps {
   car: CarListItem;
   locale?: 'es' | 'en';
+  priority?: boolean;
 }
 
 // Server Component — no interactivity, just data display
-export function CarCard({ car, locale = 'es' }: CarCardProps) {
+export function CarCard({ car, locale = 'es', priority = false }: CarCardProps) {
   const name = car.name[locale] ?? car.name.es;
   const alt = car.mainImage?.alt[locale] ?? car.mainImage?.alt.es ?? name;
   const href = `/flota/${car.slug.current}`;
@@ -39,6 +40,7 @@ export function CarCard({ car, locale = 'es' }: CarCardProps) {
                 alt={alt}
                 width={800}
                 height={500}
+                priority={priority}
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500"
               />
