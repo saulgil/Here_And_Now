@@ -79,7 +79,7 @@ export const PICKUP_POINTS: PickupPoint[] = [
       en: 'Own office. Personalized attention. Open year-round.',
     },
     seo: {
-      metaTitle: { es: 'Alquiler coches El Campello, Alicante — Oficina propia Here & Now' },
+      metaTitle: { es: 'Alquiler coches El Campello, Alicante — Oficina propia | Here & Now' },
       metaDescription: { es: 'Visita nuestra oficina en Calle de la Figuera 5, El Campello. Atención personalizada. Flota Mercedes premium.' },
       noindex: false,
     },
