@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import '@/styles/globals.css';
+import { FontSwitcher } from '@/components/dev/FontSwitcher';
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://hereandnow.es'),
@@ -26,7 +27,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="preload" href="/fonts/ClashGrotesk-Regular.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
         <link rel="preload" href="/fonts/ClashGrotesk-Semibold.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        {process.env.NODE_ENV === 'development' && <FontSwitcher />}
+      </body>
     </html>
   );
 }

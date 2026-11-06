@@ -102,11 +102,21 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Focus ring — accessible, branded */
-:focus-visible {
-  outline: 2px solid var(--color-gold);
-  outline-offset: 3px;
-  border-radius: 2px;
+/* Focus ring — accessible, branded.
+   Inside @layer base so Tailwind utilities (focus-visible:outline-none etc.)
+   can override it per-element without needing !important. */
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+}
+
+/* Header — suppress focus rings; nav links and buttons already have
+   hover/active color indicators that serve as visual feedback. */
+header :focus-visible {
+  outline: none;
 }
 
 /* Skip link */
