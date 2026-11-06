@@ -19,6 +19,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/flota`, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${SITE_URL}/contacto`, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${SITE_URL}/privacidad`, changeFrequency: 'yearly', priority: 0.3 },
+    { url: `${SITE_URL}/terminos-y-condiciones`, changeFrequency: 'yearly', priority: 0.3 },
   ];
 
   const locationRoutes: MetadataRoute.Sitemap = (locations ?? []).map((loc) => ({
