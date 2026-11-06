@@ -8,10 +8,11 @@ interface CarGridProps {
   locale?: 'es' | 'en';
   className?: string;
   headingLevel?: 2 | 3;
+  prioritizeFirst?: boolean;
 }
 
 // Server Component
-export function CarGrid({ cars, heading, subheading, locale = 'es', className, headingLevel = 3 }: CarGridProps) {
+export function CarGrid({ cars, heading, subheading, locale = 'es', className, headingLevel = 3, prioritizeFirst = true }: CarGridProps) {
   if (!cars || cars.length === 0) {
     return (
       <div className={`text-center py-16 ${className ?? ''}`}>
@@ -43,7 +44,7 @@ export function CarGrid({ cars, heading, subheading, locale = 'es', className, h
       >
         {cars.map((car, index) => (
           <li key={car._id}>
-            <CarCard car={car} locale={locale} priority={index === 0} headingLevel={headingLevel} />
+            <CarCard car={car} locale={locale} priority={prioritizeFirst && index === 0} headingLevel={headingLevel} />
           </li>
         ))}
       </ul>

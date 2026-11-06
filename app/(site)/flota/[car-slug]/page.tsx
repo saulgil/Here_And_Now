@@ -269,7 +269,7 @@ export default async function CarDetailPage({ params }: Props) {
             <h2 className="text-2xl font-semibold text-[var(--color-ink)] mb-8">
               Otros vehículos disponibles
             </h2>
-            <CarGrid cars={relatedCars} />
+            <CarGrid cars={relatedCars} prioritizeFirst={false} />
           </div>
         </section>
       )}
