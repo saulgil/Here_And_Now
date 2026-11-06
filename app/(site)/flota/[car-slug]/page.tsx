@@ -126,10 +126,39 @@ export default async function CarDetailPage({ params }: Props) {
 
       {/* ── MAIN CONTENT ──────────────────────────────────────── */}
       <div className="max-w-[1280px] mx-auto px-6 lg:px-12 py-8 lg:py-12">
+        {/*
+          Column DOM order is intentionally RIGHT-first, LEFT-second so the
+          H1 (vehicle name, in the right sidebar) precedes the H2 content
+          sections (description, specs…) in document order — required for
+          correct heading semantics. CSS `order-1` / `order-2` restores the
+          expected visual layout (wide content column on the left, narrower
+          sidebar on the right) at every breakpoint.
+        */}
         <div className="grid lg:grid-cols-[3fr_2fr] gap-8 xl:gap-12 items-start">
 
-          {/* ── LEFT: Gallery + Description + Specs ────────────── */}
-          <div className="space-y-8">
+          {/* ── RIGHT: H1 + Booking — FIRST in DOM for heading order ── */}
+          <div className="order-2 space-y-6 lg:sticky lg:top-20">
+
+            {/* Car intro (desktop only — mobile version is in the left column below) */}
+            <div className="hidden lg:block">
+              <CarIntroBlock
+                car={typedCar}
+                minPrice={minPrice}
+                availableLocations={availableLocations}
+              />
+            </div>
+
+            {/* Booking form */}
+            <CarBookingForm
+              carName={typedCar.name.es}
+              carSlug={slug}
+              priceFrom={minPrice}
+              availableLocations={availableLocations}
+            />
+          </div>
+
+          {/* ── LEFT: Gallery + Description + Specs — SECOND in DOM ── */}
+          <div className="order-1 space-y-8">
 
             {/* Gallery */}
             {typedCar.gallery && typedCar.gallery.length > 0 ? (
@@ -146,7 +175,7 @@ export default async function CarDetailPage({ params }: Props) {
               </div>
             ) : null}
 
-            {/* Car name + quick specs (mobile-only — desktop shows in right column) */}
+            {/* Car name + quick specs (mobile-only — desktop shows in right column above) */}
             <div className="lg:hidden">
               <CarIntroBlock
                 car={typedCar}
@@ -192,11 +221,11 @@ export default async function CarDetailPage({ params }: Props) {
               </div>
             )}
 
-            {/* Rental conditions */}
+            {/* Rental conditions — h2 consistent with the other content section headings above */}
             <div className="bg-[var(--color-stone)] rounded-[var(--radius-md)] p-5">
-              <h3 className="font-semibold text-[var(--color-ink)] mb-3 text-sm">
+              <h2 className="font-semibold text-[var(--color-ink)] mb-3 text-sm">
                 Condiciones del alquiler
-              </h3>
+              </h2>
               <ul className="grid grid-cols-2 gap-x-6 gap-y-2 text-sm text-[var(--color-vapor)]">
                 <li className="flex items-center gap-2">
                   <Users size={14} className="text-[var(--color-fog)]" aria-hidden />
@@ -216,27 +245,6 @@ export default async function CarDetailPage({ params }: Props) {
                 </li>
               </ul>
             </div>
-          </div>
-
-          {/* ── RIGHT: Price, Availability, Booking form ────────── */}
-          <div className="space-y-6 lg:sticky lg:top-20">
-
-            {/* Car intro (desktop only) */}
-            <div className="hidden lg:block">
-              <CarIntroBlock
-                car={typedCar}
-                minPrice={minPrice}
-                availableLocations={availableLocations}
-              />
-            </div>
-
-            {/* Booking form */}
-            <CarBookingForm
-              carName={typedCar.name.es}
-              carSlug={slug}
-              priceFrom={minPrice}
-              availableLocations={availableLocations}
-            />
           </div>
         </div>
       </div>

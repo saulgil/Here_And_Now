@@ -53,7 +53,7 @@ export default async function FlotaPage() {
       {/* Fleet grid */}
       <section className="section-padding" aria-labelledby="fleet-h1">
         <div className="max-w-[1280px] mx-auto px-6 lg:px-12">
-          <CarGrid cars={carList} />
+          <CarGrid cars={carList} headingLevel={2} />
           {carList.length === 0 && (
             <div className="text-center py-20">
               <p className="text-[var(--color-vapor)] mb-2">Flota disponible próximamente.</p>

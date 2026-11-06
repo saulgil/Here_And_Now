@@ -19,10 +19,11 @@ interface CarCardProps {
   car: CarListItem;
   locale?: 'es' | 'en';
   priority?: boolean;
+  headingLevel?: 2 | 3;
 }
 
 // Server Component — no interactivity, just data display
-export function CarCard({ car, locale = 'es', priority = false }: CarCardProps) {
+export function CarCard({ car, locale = 'es', priority = false, headingLevel = 3 }: CarCardProps) {
   const name = car.name[locale] ?? car.name.es;
   const alt = car.mainImage?.alt[locale] ?? car.mainImage?.alt.es ?? name;
   const href = `/flota/${car.slug.current}`;
@@ -69,12 +70,20 @@ export function CarCard({ car, locale = 'es', priority = false }: CarCardProps) 
 
       {/* Content */}
       <div className="p-5">
-        {/* Name */}
-        <h3 className="font-semibold text-base text-[var(--color-ink)] mb-3 leading-tight">
-          <Link href={href} className="hover:text-[var(--color-gold)] transition-colors">
-            {name}
-          </Link>
-        </h3>
+        {/* Name — heading level controlled by context (h2 on /flota, h3 under a section) */}
+        {headingLevel === 2 ? (
+          <h2 className="font-semibold text-base text-[var(--color-ink)] mb-3 leading-tight">
+            <Link href={href} className="hover:text-[var(--color-gold)] transition-colors">
+              {name}
+            </Link>
+          </h2>
+        ) : (
+          <h3 className="font-semibold text-base text-[var(--color-ink)] mb-3 leading-tight">
+            <Link href={href} className="hover:text-[var(--color-gold)] transition-colors">
+              {name}
+            </Link>
+          </h3>
+        )}
 
         {/* Specs row */}
         <ul className="flex flex-wrap gap-x-4 gap-y-1.5 mb-4" aria-label="Especificaciones">
