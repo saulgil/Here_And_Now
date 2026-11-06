@@ -37,13 +37,16 @@ export function buildMetadata({
 }): Metadata {
   const title = seo?.metaTitle?.[locale] ?? seo?.metaTitle?.es ?? fallbackTitle;
   const description = seo?.metaDescription?.[locale] ?? seo?.metaDescription?.es ?? fallbackDescription;
+
   const canonicalUrl = seo?.canonicalUrl ?? `${SITE_URL}${path}`;
   const noindex = seo?.noindex ?? false;
 
   const ogImageUrl = resolveImageUrl(seo?.ogImage) ?? resolveImageUrl(ogImageFallback);
 
   return {
-    title,
+    // Strip trailing " | Here & Now" or " — Here & Now" so the root layout
+    // template ('%s | Here & Now') adds the site name exactly once.
+    title: title?.replace(/ [—|] Here & Now$/, ''),
     description,
     alternates: {
       canonical: canonicalUrl,
